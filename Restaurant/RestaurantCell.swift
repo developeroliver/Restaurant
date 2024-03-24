@@ -16,7 +16,7 @@ class RestaurantCell: UITableViewCell {
     let nameLabel           = UILabel()
     let locationLabel       = UILabel()
     let typeLabel           = UILabel()
-    
+    let favoriteImageView   = UIImageView()
     
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -24,6 +24,13 @@ class RestaurantCell: UITableViewCell {
         
         setupStyle()
         layout()
+    }
+    
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        self.tintColor = .systemYellow
     }
     
     

@@ -93,16 +93,32 @@
 		377AD2EB2BB0305600833390 /* Restaurant */ = {
 			isa = PBXGroup;
 			children = (
-				377AD2EC2BB0305600833390 /* AppDelegate.swift */,
-				377AD2EE2BB0305600833390 /* SceneDelegate.swift */,
+				377AD3212BB07E2100833390 /* Model */,
+				377AD3202BB07E1100833390 /* Support */,
 				377AD2F02BB0305600833390 /* RestaurantVC.swift */,
 				377AD31C2BB0359900833390 /* RestaurantCell.swift */,
-				377AD31E2BB0661200833390 /* Restaurant.swift */,
-				377AD2F52BB0305700833390 /* Assets.xcassets */,
-				377AD2F72BB0305700833390 /* LaunchScreen.storyboard */,
 				377AD2FA2BB0305700833390 /* Info.plist */,
 			);
 			path = Restaurant;
+			sourceTree = "<group>";
+		};
+		377AD3202BB07E1100833390 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				377AD2EE2BB0305600833390 /* SceneDelegate.swift */,
+				377AD2EC2BB0305600833390 /* AppDelegate.swift */,
+				377AD2F52BB0305700833390 /* Assets.xcassets */,
+				377AD2F72BB0305700833390 /* LaunchScreen.storyboard */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		377AD3212BB07E2100833390 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				377AD31E2BB0661200833390 /* Restaurant.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
