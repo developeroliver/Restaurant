@@ -11,22 +11,36 @@ class RestaurantVC: UIViewController {
     
     var selectedIndexPath: IndexPath?
     
-    var restaurantNames = [
-        "Cafe Deadend", "Homei", "Teakha", "Cafe Loisl", "Petite Oyster", "For Kee Restaurant", "Po's Atelier", "Bourke Street Bakery"
-        , "Haigh's Chocolate", "Palomino Espresso", "Upstate", "Traif", "Graham Avenue Meats And Deli", "Waffle & Wolf", "Five Leaves", "Cafe Lore", "Confessional", "Barrafina", "Donostia", "Royal Oak", "CASK Pub and Kitchen"
-    ] {
-            didSet {
-                applySnapshot()
-            }
-        }
-    
-    
-    lazy var dataSource = UITableViewDiffableDataSource<Int, String>(tableView: tableView) { tableView, indexPath, name in
-        let cell = tableView.dequeueReusableCell(withIdentifier: RestaurantCell.reuseID, for: indexPath) as! RestaurantCell
-        cell.accessoryType = .disclosureIndicator
-        cell.set(withName: name, imageView: cell.imageView!)
-        return cell
-    }
+    var restaurants:[Restaurant] = [
+        Restaurant(name: "Cafe Deadend", type: "Coffee & Tea Shop", location:
+                    "Hong Kong", image: "cafedeadend", isFavorite: false),
+        Restaurant(name: "Homei", type: "Cafe", location: "Hong Kong", image:
+                    "homei", isFavorite: false),
+        Restaurant(name: "Teakha", type: "Tea House", location: "Hong Kong", image: "teakha", isFavorite: false),
+        Restaurant(name: "Cafe loisl", type: "Austrian / Causual Drink", location: "Hong Kong", image: "cafeloisl", isFavorite: false),
+        Restaurant(name: "Petite Oyster", type: "French", location: "Hong Kong"
+                   , image: "petiteoyster", isFavorite: false),
+        Restaurant(name: "For Kee Restaurant", type: "Bakery", location: "HongKong", image: "forkee", isFavorite: false),
+        Restaurant(name: "Po's Atelier", type: "Bakery", location: "Hong Kong"
+                   , image: "posatelier", isFavorite: false),
+        Restaurant(name: "Bourke Street Backery", type: "Chocolate", location:
+                    "Sydney", image: "bourkestreetbakery", isFavorite: false),
+        Restaurant(name: "Haigh's Chocolate", type: "Cafe", location: "Sydney"
+                   , image: "haigh", isFavorite: false),
+        Restaurant(name: "Palomino Espresso", type: "American / Seafood", location: "Sydney", image: "palomino", isFavorite: false),
+        Restaurant(name: "Upstate", type: "American", location: "New York", image: "upstate", isFavorite: false),
+        Restaurant(name: "Traif", type: "American", location: "New York", image: "traif", isFavorite: false),
+        Restaurant(name: "Graham Avenue Meats", type: "Breakfast & Brunch", location: "New York", image: "graham", isFavorite: false),
+        Restaurant(name: "Waffle & Wolf", type: "Coffee & Tea", location: "NewYork", image: "waffleandwolf", isFavorite: false),
+        Restaurant(name: "Five Leaves", type: "Coffee & Tea", location: "New York", image: "fiveleaves", isFavorite: false),
+        Restaurant(name: "Cafe Lore", type: "Latin American", location: "New York", image: "cafelore", isFavorite: false),
+        Restaurant(name: "Confessional", type: "Spanish", location: "New York"
+                   , image: "confessional", isFavorite: false),
+        Restaurant(name: "Barrafina", type: "Spanish", location: "London", image: "barrafina", isFavorite: false),
+        Restaurant(name: "Donostia", type: "Spanish", location: "London", image: "donostia", isFavorite: false),
+        Restaurant(name: "Royal Oak", type: "British", location: "London", image: "royaloak", isFavorite: false),
+        Restaurant(name: "CASK Pub and Kitchen", type: "Thai", location: "London", image: "cask", isFavorite: false)
+    ]
     
     let tableView = UITableView()
     
@@ -35,7 +49,6 @@ class RestaurantVC: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         style()
-        applySnapshot()
     }
     
     
@@ -43,13 +56,6 @@ class RestaurantVC: UIViewController {
         return true
     }
     
-    
-    private func applySnapshot() {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, String>()
-        snapshot.appendSections([0])
-        snapshot.appendItems(restaurantNames)
-        dataSource.apply(snapshot, animatingDifferences: true)
-    }
 }
 
 // MARK: - Style Extensions
@@ -59,7 +65,7 @@ extension RestaurantVC {
         view.addSubview(tableView)
         
         tableView.frame = view.bounds
-        tableView.dataSource = dataSource
+        tableView.dataSource = self
         tableView.delegate = self
         tableView.register(RestaurantCell.self, forCellReuseIdentifier: RestaurantCell.reuseID)
     }
@@ -67,8 +73,19 @@ extension RestaurantVC {
 
 
 // MARK: Table view data source
-extension RestaurantVC:  UITableViewDelegate {
+extension RestaurantVC: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return restaurants.count
+    }
     
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: RestaurantCell.reuseID, for: indexPath) as! RestaurantCell
+        let restaurant = restaurants[indexPath.row]
+        
+        cell.set(restaurant: restaurant)
+        
+        return cell
+    }
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -78,17 +95,14 @@ extension RestaurantVC:  UITableViewDelegate {
             previousSelectedCell?.backgroundColor = .clear
         }
         
-        // Mettez à jour la cellule sélectionnée et changez sa couleur
         selectedIndexPath = indexPath
         let selectedCell = tableView.cellForRow(at: indexPath)
-        selectedCell?.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.3) // Choisissez la couleur de votre choix
-        
-        // Désélectionnez la cellule pour éviter que la couleur sélectionnée ne reste
+        selectedCell?.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.3)
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
+        return 140
     }
 }

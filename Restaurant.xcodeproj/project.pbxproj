@@ -13,6 +13,7 @@
 		377AD2F62BB0305700833390 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 377AD2F52BB0305700833390 /* Assets.xcassets */; };
 		377AD2F92BB0305700833390 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 377AD2F72BB0305700833390 /* LaunchScreen.storyboard */; };
 		377AD31D2BB0359900833390 /* RestaurantCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377AD31C2BB0359900833390 /* RestaurantCell.swift */; };
+		377AD31F2BB0661200833390 /* Restaurant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377AD31E2BB0661200833390 /* Restaurant.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +44,7 @@
 		377AD2FF2BB0305700833390 /* RestaurantTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RestaurantTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		377AD3092BB0305700833390 /* RestaurantUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RestaurantUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		377AD31C2BB0359900833390 /* RestaurantCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantCell.swift; sourceTree = "<group>"; };
+		377AD31E2BB0661200833390 /* Restaurant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Restaurant.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +97,7 @@
 				377AD2EE2BB0305600833390 /* SceneDelegate.swift */,
 				377AD2F02BB0305600833390 /* RestaurantVC.swift */,
 				377AD31C2BB0359900833390 /* RestaurantCell.swift */,
+				377AD31E2BB0661200833390 /* Restaurant.swift */,
 				377AD2F52BB0305700833390 /* Assets.xcassets */,
 				377AD2F72BB0305700833390 /* LaunchScreen.storyboard */,
 				377AD2FA2BB0305700833390 /* Info.plist */,
@@ -232,6 +235,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				377AD31F2BB0661200833390 /* Restaurant.swift in Sources */,
 				377AD31D2BB0359900833390 /* RestaurantCell.swift in Sources */,
 				377AD2F12BB0305600833390 /* RestaurantVC.swift in Sources */,
 				377AD2ED2BB0305600833390 /* AppDelegate.swift in Sources */,
