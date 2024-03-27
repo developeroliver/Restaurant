@@ -17,6 +17,7 @@ class RestaurantCell: UITableViewCell {
     let locationLabel       = UILabel()
     let typeLabel           = UILabel()
     let favoriteImageView   = UIImageView()
+    let sharedButton        = UIButton(type: .system)
     
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -53,7 +54,7 @@ class RestaurantCell: UITableViewCell {
         stackView.spacing       = 4
         
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        nameLabel.font = UIFont.preferredFont(forTextStyle: .title2)
+        nameLabel.font = UIFont.preferredFont(forTextStyle: .headline)
         
         locationLabel.translatesAutoresizingMaskIntoConstraints = false
         locationLabel.font = UIFont.preferredFont(forTextStyle: .body)
@@ -64,7 +65,12 @@ class RestaurantCell: UITableViewCell {
         
         favoriteImageView.translatesAutoresizingMaskIntoConstraints = false
         favoriteImageView.image = UIImage(systemName: "heart.fill")
-        favoriteImageView.tintColor = .systemPink
+        favoriteImageView.tintColor = .systemYellow
+        
+        sharedButton.translatesAutoresizingMaskIntoConstraints = false
+        sharedButton.setImage(UIImage(named: "share"), for: .normal)
+        sharedButton.tintColor = .secondaryLabel
+        
     }
     
     
@@ -73,6 +79,8 @@ class RestaurantCell: UITableViewCell {
         addSubview(thumbnailImageView)
         addSubview(stackView)
         addSubview(favoriteImageView)
+        contentView.addSubview(sharedButton)
+        contentView.bringSubviewToFront(sharedButton)
         
         stackView.addArrangedSubview(nameLabel)
         stackView.addArrangedSubview(locationLabel)
@@ -89,10 +97,16 @@ class RestaurantCell: UITableViewCell {
             stackView.leadingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: 16),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
             
-            favoriteImageView.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            
+            sharedButton.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            sharedButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+            sharedButton.widthAnchor.constraint(equalToConstant: 20),
+            sharedButton.heightAnchor.constraint(equalToConstant: 20),
+            
+            favoriteImageView.topAnchor.constraint(equalTo: sharedButton.bottomAnchor, constant: 10),
             favoriteImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-            favoriteImageView.widthAnchor.constraint(equalToConstant: 30),
-            favoriteImageView.heightAnchor.constraint(equalToConstant: 30)
+            favoriteImageView.widthAnchor.constraint(equalToConstant: 25),
+            favoriteImageView.heightAnchor.constraint(equalToConstant: 25),
         ])
     }
     
