@@ -50,7 +50,7 @@ class RestaurantCell: UITableViewCell {
         stackView.axis          = .vertical
         stackView.distribution  = .fill
         stackView.alignment     = .top
-        stackView.spacing       = 0
+        stackView.spacing       = 4
         
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.font = UIFont.preferredFont(forTextStyle: .title2)
@@ -61,6 +61,10 @@ class RestaurantCell: UITableViewCell {
         typeLabel.translatesAutoresizingMaskIntoConstraints = false
         typeLabel.textColor     = UIColor.secondaryLabel
         typeLabel.font          = UIFont.preferredFont(forTextStyle: .subheadline)
+        
+        favoriteImageView.translatesAutoresizingMaskIntoConstraints = false
+        favoriteImageView.image = UIImage(systemName: "heart.fill")
+        favoriteImageView.tintColor = .systemPink
     }
     
     
@@ -68,6 +72,7 @@ class RestaurantCell: UITableViewCell {
     private func layout() {
         addSubview(thumbnailImageView)
         addSubview(stackView)
+        addSubview(favoriteImageView)
         
         stackView.addArrangedSubview(nameLabel)
         stackView.addArrangedSubview(locationLabel)
@@ -83,6 +88,11 @@ class RestaurantCell: UITableViewCell {
             stackView.topAnchor.constraint(equalTo: topAnchor, constant: 8),
             stackView.leadingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: 16),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+            
+            favoriteImageView.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            favoriteImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+            favoriteImageView.widthAnchor.constraint(equalToConstant: 30),
+            favoriteImageView.heightAnchor.constraint(equalToConstant: 30)
         ])
     }
     
@@ -95,13 +105,3 @@ class RestaurantCell: UITableViewCell {
         typeLabel.text              = restaurant.type
     }
 }
-
-
-extension UILabel {
-    func removePadding() {
-        let newInsets = UIEdgeInsets(top: -2, left: 0, bottom: -2, right: 0)
-        self.drawText(in: self.bounds.inset(by: newInsets))
-    }
-}
-
-
