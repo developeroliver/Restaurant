@@ -13,4 +13,6 @@ struct Restaurant: Hashable {
     var location: String = ""
     var image: String = ""
     var isFavorite: Bool = false
+    var phone: String = ""
+    var description: String = ""
 }
