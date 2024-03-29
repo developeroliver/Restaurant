@@ -8,6 +8,7 @@
 import UIKit
 
 class RestaurantVC: UIViewController {
+    
     var selectedIndexPath: IndexPath?
     private var dataSource: UITableViewDiffableDataSource<Int, Restaurant>!
     
@@ -38,8 +39,7 @@ class RestaurantVC: UIViewController {
     lazy var restaurantShown        = [Bool](repeating: false, count: restaurants.count)
     let tableView                   = UITableView()
     
-    
-    // MARK: - View controller life cycle
+    // MARK: - LifeCycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         if let appearance = navigationController?.navigationBar.standardAppearance
@@ -50,8 +50,7 @@ class RestaurantVC: UIViewController {
                 appearance.largeTitleTextAttributes = [.foregroundColor: UIColor(named: "NavigationBarTitle")!, .font: customFont]
             }
         }
-        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.largeTitleDisplayMode = .always
+        
         style()
         dataSource = setupDataSource()
         setupInitialSnapshot()
@@ -60,16 +59,20 @@ class RestaurantVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        // Réinitialiser la position de défilement de la UITableView à la première ligne
         let indexPath = IndexPath(row: 0, section: 0)
         tableView.scrollToRow(at: indexPath, at: .top, animated: false)
     }
+}
+
+// MARK: - Our Style and Layout
+extension RestaurantVC {
     
-    
-    // MARK: - UITableView
     private func style() {
         view.backgroundColor = .systemBackground
         title = "Les bons plans"
+        
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.largeTitleDisplayMode = .always
         
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped))
         navigationItem.rightBarButtonItem = addButton
@@ -83,7 +86,6 @@ class RestaurantVC: UIViewController {
         tableView.register(RestaurantCell.self, forCellReuseIdentifier: RestaurantCell.reuseID)
         tableView.delegate = self
     }
-    
     
     // MARK: - UITableView Diffable Data Source
     private func setupDataSource() -> RestaurantDiffableDataSource{
@@ -104,9 +106,11 @@ class RestaurantVC: UIViewController {
         
         return dataSource
     }
+}
+
+// MARK: - Our Action Button and Logic
+extension RestaurantVC {
     
-    
-    // MARK: - DataSource snapshot
     private func setupInitialSnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<Int, Restaurant>()
         snapshot.appendSections([0])
@@ -115,8 +119,6 @@ class RestaurantVC: UIViewController {
         dataSource.apply(snapshot, animatingDifferences: false)
     }
     
-    
-    // MARK: - Action Button
     @objc func handleSharedButton(_ sender: AnyObject) {
         // Get the selected row
         let buttonPosition = sender.convert(CGPoint.zero, to: tableView)
@@ -144,17 +146,28 @@ class RestaurantVC: UIViewController {
         self.present(shareMenu, animated: true, completion: nil)
     }
     
-    
     @objc func addButtonTapped() {
-        print("Add")
+        let alert = UIAlertController(title: "Fonctionnalité non disponible", message: "Cette fonctionnalité n'est pas encore disponible.", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(okAction)
+        present(alert, animated: true, completion: nil)
+        
     }
     
     
     @objc func handleIsFavorite() {
         print("Handle is favorite")
     }
+    
+    private func delete(restaurant: Restaurant) {
+        if let index = restaurants.firstIndex(where: { $0.name == restaurant.name }) {
+            restaurants.remove(at: index)
+            var snapshot = dataSource.snapshot()
+            snapshot.deleteItems([restaurant])
+            dataSource.apply(snapshot, animatingDifferences: true)
+        }
+    }
 }
-
 
 // MARK: - UITableViewDelegate
 extension RestaurantVC: UITableViewDelegate {
@@ -171,7 +184,6 @@ extension RestaurantVC: UITableViewDelegate {
         detailVC.restaurant = info
         navigationController?.pushViewController(detailVC, animated: true)
     }
-    
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
@@ -223,7 +235,6 @@ extension RestaurantVC: UITableViewDelegate {
         return swipeConfiguration
     }
     
-    
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         /// Get the selected restaurant
@@ -253,7 +264,6 @@ extension RestaurantVC: UITableViewDelegate {
         return swipeConfiguration
     }
     
-    
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
         if restaurantShown[indexPath.row] {
@@ -271,15 +281,7 @@ extension RestaurantVC: UITableViewDelegate {
         UIView.animate(withDuration: 0.3, delay: TimeInterval(indexPath.row) * 0.1, options: .curveEaseInOut, animations: {
             cell.layer.transform = CATransform3DIdentity
         }, completion: nil)
-        
-    }
-    
-    private func delete(restaurant: Restaurant) {
-        if let index = restaurants.firstIndex(where: { $0.name == restaurant.name }) {
-            restaurants.remove(at: index)
-            var snapshot = dataSource.snapshot()
-            snapshot.deleteItems([restaurant])
-            dataSource.apply(snapshot, animatingDifferences: true)
-        }
     }
 }
+
+

@@ -134,13 +134,13 @@
 				374CE23C2BB5F07B00C2EA2E /* Extension */,
 				377AD3212BB07E2100833390 /* Model */,
 				3719D28A2BB5BC2E003A0869 /* Resources */,
-				377AD3202BB07E1100833390 /* Support */,
+				377AD3202BB07E1100833390 /* App */,
 				377AD3232BB0A4BF00833390 /* View */,
 			);
 			path = Restaurant;
 			sourceTree = "<group>";
 		};
-		377AD3202BB07E1100833390 /* Support */ = {
+		377AD3202BB07E1100833390 /* App */ = {
 			isa = PBXGroup;
 			children = (
 				377AD2EE2BB0305600833390 /* SceneDelegate.swift */,
@@ -148,7 +148,7 @@
 				377AD2F52BB0305700833390 /* Assets.xcassets */,
 				377AD2F72BB0305700833390 /* LaunchScreen.storyboard */,
 			);
-			path = Support;
+			path = App;
 			sourceTree = "<group>";
 		};
 		377AD3212BB07E2100833390 /* Model */ = {
