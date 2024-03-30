@@ -1,5 +1,5 @@
 //
-//  RestaurantDetailVC.swift
+//  RestaurantDetailViewController.swift
 //  Restaurant
 //
 //  Created by olivier geiger on 25/03/2024.
@@ -8,7 +8,7 @@
 import UIKit
 import MapKit
 
-class RestaurantDetailVC: UIViewController, RatingViewDelegate {
+class RestaurantDetailViewController: UIViewController, RatingViewDelegate {
     
     var restaurant: Restaurant?
     // ajout d'une variable
@@ -45,7 +45,7 @@ class RestaurantDetailVC: UIViewController, RatingViewDelegate {
 }
 
 // MARK: - Action Button and Logic
-extension RestaurantDetailVC {
+extension RestaurantDetailViewController {
     
     @objc func backButtonTapped() {
         navigationController?.popViewController(animated: true)
@@ -117,7 +117,7 @@ extension RestaurantDetailVC {
 }
 
 // MARK: - Our Style and Layout
-extension RestaurantDetailVC {
+extension RestaurantDetailViewController {
     
     private func style() {
         view.backgroundColor = .systemBackground
@@ -315,7 +315,7 @@ extension RestaurantDetailVC {
 }
 
 // MARK: - Our Action Button and Logic
-extension RestaurantDetailVC {
+extension RestaurantDetailViewController {
     
     @objc func mapTapped(_ gestureRecognizer: UITapGestureRecognizer) {
         if gestureRecognizer.state == .ended {

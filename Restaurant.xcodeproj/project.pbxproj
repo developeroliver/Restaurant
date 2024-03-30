@@ -9,14 +9,17 @@
 /* Begin PBXBuildFile section */
 		373277CB2BB83E4F00F089AD /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373277CA2BB83E4F00F089AD /* CustomButton.swift */; };
 		3733C0422BB1C1410057D293 /* RestaurantDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3733C0412BB1C1410057D293 /* RestaurantDiffableDataSource.swift */; };
-		3733C0442BB1DA450057D293 /* RestaurantDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3733C0432BB1DA450057D293 /* RestaurantDetailVC.swift */; };
+		3733C0442BB1DA450057D293 /* RestaurantDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3733C0432BB1DA450057D293 /* RestaurantDetailViewController.swift */; };
 		374CE2392BB5D59200C2EA2E /* Nunito-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 374CE2382BB5D59200C2EA2E /* Nunito-Regular.ttf */; };
 		374CE23B2BB5D5A200C2EA2E /* Nunito-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 374CE23A2BB5D5A200C2EA2E /* Nunito-Bold.ttf */; };
 		374CE23E2BB5F0A300C2EA2E /* UIColor+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374CE23D2BB5F0A300C2EA2E /* UIColor+Ext.swift */; };
 		3779D6772BB88008003AD375 /* RatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3779D6762BB88008003AD375 /* RatingView.swift */; };
+		3779D67B2BB895D8003AD375 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3779D67A2BB895D8003AD375 /* MainTabBarViewController.swift */; };
+		3779D67D2BB8961D003AD375 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3779D67C2BB8961D003AD375 /* ProfileViewController.swift */; };
+		3779D67F2BB89665003AD375 /* DiscoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3779D67E2BB89665003AD375 /* DiscoverViewController.swift */; };
 		377AD2ED2BB0305600833390 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377AD2EC2BB0305600833390 /* AppDelegate.swift */; };
 		377AD2EF2BB0305600833390 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377AD2EE2BB0305600833390 /* SceneDelegate.swift */; };
-		377AD2F12BB0305600833390 /* RestaurantVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377AD2F02BB0305600833390 /* RestaurantVC.swift */; };
+		377AD2F12BB0305600833390 /* RestaurantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377AD2F02BB0305600833390 /* RestaurantViewController.swift */; };
 		377AD2F62BB0305700833390 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 377AD2F52BB0305700833390 /* Assets.xcassets */; };
 		377AD2F92BB0305700833390 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 377AD2F72BB0305700833390 /* LaunchScreen.storyboard */; };
 		377AD31D2BB0359900833390 /* RestaurantCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377AD31C2BB0359900833390 /* RestaurantCell.swift */; };
@@ -44,15 +47,18 @@
 /* Begin PBXFileReference section */
 		373277CA2BB83E4F00F089AD /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		3733C0412BB1C1410057D293 /* RestaurantDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantDiffableDataSource.swift; sourceTree = "<group>"; };
-		3733C0432BB1DA450057D293 /* RestaurantDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantDetailVC.swift; sourceTree = "<group>"; };
+		3733C0432BB1DA450057D293 /* RestaurantDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantDetailViewController.swift; sourceTree = "<group>"; };
 		374CE2382BB5D59200C2EA2E /* Nunito-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-Regular.ttf"; sourceTree = "<group>"; };
 		374CE23A2BB5D5A200C2EA2E /* Nunito-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-Bold.ttf"; sourceTree = "<group>"; };
 		374CE23D2BB5F0A300C2EA2E /* UIColor+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Ext.swift"; sourceTree = "<group>"; };
 		3779D6762BB88008003AD375 /* RatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingView.swift; sourceTree = "<group>"; };
+		3779D67A2BB895D8003AD375 /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
+		3779D67C2BB8961D003AD375 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		3779D67E2BB89665003AD375 /* DiscoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverViewController.swift; sourceTree = "<group>"; };
 		377AD2E92BB0305600833390 /* Restaurant.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Restaurant.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		377AD2EC2BB0305600833390 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		377AD2EE2BB0305600833390 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		377AD2F02BB0305600833390 /* RestaurantVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantVC.swift; sourceTree = "<group>"; };
+		377AD2F02BB0305600833390 /* RestaurantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantViewController.swift; sourceTree = "<group>"; };
 		377AD2F52BB0305700833390 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		377AD2F82BB0305700833390 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		377AD2FA2BB0305700833390 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -122,6 +128,14 @@
 			path = "ùtils";
 			sourceTree = "<group>";
 		};
+		3779D6782BB89467003AD375 /* Rating */ = {
+			isa = PBXGroup;
+			children = (
+				3779D6762BB88008003AD375 /* RatingView.swift */,
+			);
+			path = Rating;
+			sourceTree = "<group>";
+		};
 		377AD2E02BB0305600833390 = {
 			isa = PBXGroup;
 			children = (
@@ -178,8 +192,11 @@
 			isa = PBXGroup;
 			children = (
 				37C192B22BB75302008A4B9F /* MapViewController.swift */,
-				3733C0432BB1DA450057D293 /* RestaurantDetailVC.swift */,
-				377AD2F02BB0305600833390 /* RestaurantVC.swift */,
+				3733C0432BB1DA450057D293 /* RestaurantDetailViewController.swift */,
+				377AD2F02BB0305600833390 /* RestaurantViewController.swift */,
+				3779D67A2BB895D8003AD375 /* MainTabBarViewController.swift */,
+				3779D67C2BB8961D003AD375 /* ProfileViewController.swift */,
+				3779D67E2BB89665003AD375 /* DiscoverViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -187,9 +204,9 @@
 		377AD3232BB0A4BF00833390 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				3779D6782BB89467003AD375 /* Rating */,
 				373277CC2BB83E5400F089AD /* Custom */,
 				377AD3242BB0A4C900833390 /* Cell */,
-				3779D6762BB88008003AD375 /* RatingView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -343,11 +360,14 @@
 				377AD31F2BB0661200833390 /* Restaurant.swift in Sources */,
 				377AD31D2BB0359900833390 /* RestaurantCell.swift in Sources */,
 				37C192B32BB75302008A4B9F /* MapViewController.swift in Sources */,
-				377AD2F12BB0305600833390 /* RestaurantVC.swift in Sources */,
+				377AD2F12BB0305600833390 /* RestaurantViewController.swift in Sources */,
 				373277CB2BB83E4F00F089AD /* CustomButton.swift in Sources */,
-				3733C0442BB1DA450057D293 /* RestaurantDetailVC.swift in Sources */,
+				3733C0442BB1DA450057D293 /* RestaurantDetailViewController.swift in Sources */,
 				377AD2ED2BB0305600833390 /* AppDelegate.swift in Sources */,
 				374CE23E2BB5F0A300C2EA2E /* UIColor+Ext.swift in Sources */,
+				3779D67F2BB89665003AD375 /* DiscoverViewController.swift in Sources */,
+				3779D67B2BB895D8003AD375 /* MainTabBarViewController.swift in Sources */,
+				3779D67D2BB8961D003AD375 /* ProfileViewController.swift in Sources */,
 				3733C0422BB1C1410057D293 /* RestaurantDiffableDataSource.swift in Sources */,
 				377AD2EF2BB0305600833390 /* SceneDelegate.swift in Sources */,
 			);

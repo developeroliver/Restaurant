@@ -7,7 +7,7 @@
 
 import UIKit
 
-class RestaurantVC: UIViewController {
+class RestaurantViewController: UIViewController {
     
     var selectedIndexPath: IndexPath?
     private var dataSource: UITableViewDiffableDataSource<Int, Restaurant>!
@@ -66,7 +66,7 @@ class RestaurantVC: UIViewController {
 }
 
 // MARK: - Our Style and Layout
-extension RestaurantVC {
+extension RestaurantViewController {
     
     private func style() {
         view.backgroundColor = .systemBackground
@@ -109,7 +109,7 @@ extension RestaurantVC {
 }
 
 // MARK: - Our Action Button and Logic
-extension RestaurantVC {
+extension RestaurantViewController {
     
     private func setupInitialSnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<Int, Restaurant>()
@@ -144,11 +144,11 @@ extension RestaurantVC {
 }
 
 // MARK: - UITableViewDelegate
-extension RestaurantVC: UITableViewDelegate {
+extension RestaurantViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let info = restaurants[indexPath.row]
-        let detailVC = RestaurantDetailVC()
+        let detailVC = RestaurantDetailViewController()
         
         let heartImage = info.isFavorite ? "heart.fill" : "heart"
         detailVC.heartButton.tintColor = info.isFavorite ? .systemPink : .white
@@ -259,6 +259,6 @@ extension RestaurantVC: UITableViewDelegate {
 }
 
 #Preview {
-    let vc = RestaurantVC()
+    let vc = RestaurantViewController()
     return vc
 }
