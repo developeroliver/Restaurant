@@ -138,3 +138,8 @@ extension RestaurantCell {
         typeLabel.text              = restaurant.type
     }
 }
+
+#Preview {
+    let vc = RestaurantCell()
+    return vc
+}

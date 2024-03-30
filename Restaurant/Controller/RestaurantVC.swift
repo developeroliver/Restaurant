@@ -15,7 +15,7 @@ class RestaurantVC: UIViewController {
     var restaurants:[Restaurant] = [
         Restaurant(name: "L'art du café", type: "Salon de Café et thé", location: "10 Allée François Mitterrand, 67400 Illkirch-Graffenstaden", image: "cafedeadend", isFavorite: false, phone: "03 88 43 06 77", description: "Café/Snack agréable pour la pause déjeuner. Carte simple, proposition de plat du jour. Si les plats ne sortent pas particulièrement de l'ordinaire, ils sont bien réalisés, avec des ingrédients frais et le plaisir est là."),
         Restaurant(name: "Café Broglie", type: "Salon de Café", location: "1 Rue du Dôme, 67000 Strasbourg", image: "homei", isFavorite: false, phone: "03 88 32 08 08", description: "le Café Broglie se situe à quelques pas de l'Opéra et de la Cathédrale, c'est une étape incontournable et fait partie des lieux que les strasbourgeois fréquentes très souvent. Dans ce café brasserie, retrouvez une série de plats français composé par le chef de cuisine et son équipe. Tous les jours, découvrez également les suggestions sur ardoise. Pour finir venez déguster nos petits déjeuners."),
-        Restaurant(name: "Au Fond de la Théière", type: "Maison du thé", location: "32 Grand'Rue, 67000 Strasbourg", image: "teakha", isFavorite: false, phone: "09 55 39 16 73", description: "Salon de thé convivial avec une salle intérieure et une terrasse. Le salon vous propose des thés/cafés accompagnés et pâtisseries préparées par un grand chef étoilé, des sandwichs chauds ou froids et des salades."),
+        Restaurant(name: "Au Fond de la Théière", type: "Maison du thé", location: "32 Grande Rue, 67000 Strasbourg", image: "teakha", isFavorite: false, phone: "09 55 39 16 73", description: "Salon de thé convivial avec une salle intérieure et une terrasse. Le salon vous propose des thés/cafés accompagnés et pâtisseries préparées par un grand chef étoilé, des sandwichs chauds ou froids et des salades."),
         Restaurant(name: "Le Café Monceau", type: "Salon de Café et thé", location: "154a Rte de Lyon, 67400 Illkirch-Graffenstaden", image: "cafeloisl", isFavorite: false, phone: "09 86 73 70 80", description: "Dans un cadre charmant et convivial et grâce à nos délicieux plats, nous convainquons nos clients dès leur première visite.  Le Café Monceau est un lieu de rencontre prisé pour le petit déjeuner, déjeuner ou l'apéro..."),
         Restaurant(name: "Le chasseur", type: "Restaurant", location: "70 Rte de Lyon, 67400 Illkirch-Graffenstaden", image: "petiteoyster", isFavorite: false, phone: "03 88 66 77 69", description: "La cuisine française créée par un chef grandiose est magnifique à cet endroit. N'oubliez pas d'apprécier des tartes cuites à la perfection à ce restaurant. Les gourmets remarquent qu'un gâteau aux fruits est savoureux ici. Un vin délicieux rendra votre repas plus savoureux et vous fera surement revenir. Sur la base des opinions des visiteurs, les serveurs offrent un café immense ici."),
         Restaurant(name: "Au vieux Strasbourg", type: "Restaurant", location: "5 Rue du Maroquin, 67000 Strasbourg", image: "forkee", isFavorite: false, phone: "03 88 32 41 89", description: "Restaurant à l'ambiance détendue doté de murs en lambris, servant des spécialités alsaciennes comme les spätzle et le foie gras."),
@@ -284,4 +284,7 @@ extension RestaurantVC: UITableViewDelegate {
     }
 }
 
-
+#Preview {
+    let vc = RestaurantVC()
+    return vc
+}

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import MapKit
 
 class RestaurantDetailVC: UIViewController {
     
@@ -23,6 +24,7 @@ class RestaurantDetailVC: UIViewController {
     let addressText         = UILabel()
     let phoneLabel          = UILabel()
     let phoneText           = UILabel()
+    let mapView             = MKMapView()
     
     // MARK: - LifeCycle Methods
     override func viewDidLoad() {
@@ -30,6 +32,36 @@ class RestaurantDetailVC: UIViewController {
         style()
         layout()
         setupBackButton()
+//        setupGps()
+        configure(location: restaurant!.location)
+    }
+}
+
+// MARK: - Action Button and Logic
+extension RestaurantDetailVC {
+    
+    @objc func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
+    }
+    
+    private func setupBackButton() {
+        let backButtonImage = UIImage(systemName: "arrow.backward", withConfiguration: UIImage.SymbolConfiguration(pointSize: 20.0, weight: .bold))
+        let backButton = UIBarButtonItem(image: backButtonImage, style: .plain, target: self, action: #selector(backButtonTapped))
+        backButton.tintColor = .white
+        navigationItem.leftBarButtonItem = backButton
+    }
+    
+    private func setupGps() {
+        let initialLocation = CLLocation(latitude: 48.52777778, longitude: 7.70805556)
+        let regionRadius: CLLocationDistance = 1000
+        let coordinateRegion = MKCoordinateRegion(center: initialLocation.coordinate,
+                                                  latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
+        mapView.setRegion(coordinateRegion, animated: true)
+        
+        let annotation = MKPointAnnotation()
+        annotation.title = "Illkirch"
+        annotation.coordinate = initialLocation.coordinate
+        mapView.addAnnotation(annotation)
     }
 }
 
@@ -96,10 +128,11 @@ extension RestaurantDetailVC {
         
         /// addressText
         addressText.translatesAutoresizingMaskIntoConstraints = false
-        addressText.text        = restaurant?.location
-        addressText.textColor   = .label
-        addressText.numberOfLines  = 2
-        addressText.lineBreakMode  = .byTruncatingTail
+        addressText.text                        = restaurant?.location
+        addressText.textColor                   = .label
+        addressText.numberOfLines               = 2
+        addressText.lineBreakMode               = .byTruncatingTail
+        addressText.isUserInteractionEnabled    = true
         
         /// phoneLabel
         phoneLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -111,6 +144,13 @@ extension RestaurantDetailVC {
         phoneText.translatesAutoresizingMaskIntoConstraints = false
         phoneText.text      = restaurant?.phone
         phoneText.textColor = .label
+        
+        /// mapView
+        mapView.translatesAutoresizingMaskIntoConstraints = false
+        mapView.layer.cornerRadius = 20
+        mapView.clipsToBounds = true
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(mapTapped(_:)))
+        mapView.addGestureRecognizer(tapGesture)
     }
     
     private func layout() {
@@ -126,13 +166,14 @@ extension RestaurantDetailVC {
         view.addSubview(addressText)
         view.addSubview(phoneLabel)
         view.addSubview(phoneText)
+        view.addSubview(mapView)
         
         /// thumbnailImageView
         NSLayoutConstraint.activate([
             thumbnailImageView.topAnchor.constraint(equalTo: view.topAnchor),
             thumbnailImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             thumbnailImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            thumbnailImageView.heightAnchor.constraint(equalToConstant: 520),
+            thumbnailImageView.heightAnchor.constraint(equalToConstant: 350),
         ])
         
         /// heartButton
@@ -145,7 +186,7 @@ extension RestaurantDetailVC {
         
         /// stackView
         NSLayoutConstraint.activate([
-            stackView.bottomAnchor.constraint(equalTo: heartButton.bottomAnchor, constant: 370),
+            stackView.bottomAnchor.constraint(equalTo: thumbnailImageView.bottomAnchor, constant: -10),
             stackView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -120),
         ])
@@ -169,7 +210,7 @@ extension RestaurantDetailVC {
             addressText.topAnchor.constraint(equalToSystemSpacingBelow: addressLabel.bottomAnchor, multiplier: 1),
             addressText.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
             addressText.trailingAnchor.constraint(equalToSystemSpacingAfter: view.trailingAnchor, multiplier: 2)
-
+            
         ])
         
         /// phoneLabel
@@ -185,20 +226,53 @@ extension RestaurantDetailVC {
             phoneText.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
             view.trailingAnchor.constraint(equalToSystemSpacingAfter: phoneText.leadingAnchor, multiplier: 2),
         ])
+        
+        /// mapView
+        NSLayoutConstraint.activate([
+            mapView.topAnchor.constraint(equalTo: phoneText.bottomAnchor, constant: 10),
+            mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            mapView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0)
+        ])
     }
 }
 
-// MARK: - Action Button and Logic
+// MARK: - Our Action Button and Logic
 extension RestaurantDetailVC {
     
-    @objc func backButtonTapped() {
-        navigationController?.popViewController(animated: true)
+    @objc func mapTapped(_ gestureRecognizer: UITapGestureRecognizer) {
+        if gestureRecognizer.state == .ended {
+            
+            let destination = MapViewController()
+            destination.restaurant = restaurant!
+            navigationController?.pushViewController(destination, animated: true)
+        }
     }
     
-    private func setupBackButton() {
-        let backButtonImage = UIImage(systemName: "arrow.backward", withConfiguration: UIImage.SymbolConfiguration(pointSize: 20.0, weight: .bold))
-        let backButton = UIBarButtonItem(image: backButtonImage, style: .plain, target: self, action: #selector(backButtonTapped))
-        backButton.tintColor = .white
-        navigationItem.leftBarButtonItem = backButton
+    private func configure(location: String) {
+        // Get location
+        let geoCoder = CLGeocoder()
+        
+        geoCoder.geocodeAddressString(location, completionHandler: { placemarks, error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            
+            if let placemarks = placemarks {
+                // Get the first placemark
+                let placemark = placemarks[0]
+                // Add annotation
+                let annotation = MKPointAnnotation()
+                if let location = placemark.location {
+                    // Display the annotation
+                    annotation.coordinate = location.coordinate
+                    self.mapView.addAnnotation(annotation)
+                    // Set the zoom level
+                    let region = MKCoordinateRegion(center: annotation.coordinate, latitudinalMeters: 250, longitudinalMeters: 250)
+                    self.mapView.setRegion(region, animated: false)
+                }
+            }
+        })
     }
 }
