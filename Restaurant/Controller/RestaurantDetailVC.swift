@@ -8,9 +8,11 @@
 import UIKit
 import MapKit
 
-class RestaurantDetailVC: UIViewController {
+class RestaurantDetailVC: UIViewController, RatingViewDelegate {
     
     var restaurant: Restaurant?
+    // ajout d'une variable
+    var selectedRating: Int = 0
     
     let thumbnailImageView  = UIImageView()
     let heartButton         = UIButton(type: .system)
@@ -24,7 +26,12 @@ class RestaurantDetailVC: UIViewController {
     let addressText         = UILabel()
     let phoneLabel          = UILabel()
     let phoneText           = UILabel()
+    let ratingText          = UILabel()
     let mapView             = MKMapView()
+    let rateButton          = CustomButton(backgroundColor: UIColor(named: "NavigationBarTitle")!, title: "Évaluer")
+    let emojiPicker         = UIPickerView()
+    let emojis              = ["😍", "😎", "😃", "🥲", "😡"]
+    let ratingView          = RatingView()
     
     // MARK: - LifeCycle Methods
     override func viewDidLoad() {
@@ -32,8 +39,8 @@ class RestaurantDetailVC: UIViewController {
         style()
         layout()
         setupBackButton()
-//        setupGps()
         configure(location: restaurant!.location)
+        ratingView.delegate = self
     }
 }
 
@@ -51,17 +58,61 @@ extension RestaurantDetailVC {
         navigationItem.leftBarButtonItem = backButton
     }
     
-    private func setupGps() {
-        let initialLocation = CLLocation(latitude: 48.52777778, longitude: 7.70805556)
-        let regionRadius: CLLocationDistance = 1000
-        let coordinateRegion = MKCoordinateRegion(center: initialLocation.coordinate,
-                                                  latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
-        mapView.setRegion(coordinateRegion, animated: true)
+    @objc func handleRateButton() {
         
-        let annotation = MKPointAnnotation()
-        annotation.title = "Illkirch"
-        annotation.coordinate = initialLocation.coordinate
-        mapView.addAnnotation(annotation)
+        let alert = UIAlertController(title: "Donnez une évaluation", message: nil, preferredStyle: .alert)
+        
+        let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+            if self.selectedRating == 0 {
+                self.ratingText.text = ""
+            } else {
+                self.ratingText.text = "Évaluation: \(self.starsString(for: self.selectedRating))"
+            }
+            
+            UIView.animate(withDuration: 0.5) {
+                self.ratingText.frame.origin = CGPoint(x: 100, y: 100)
+            }
+
+        }
+        
+        let cancelAction = UIAlertAction(title: "Annuler", style: .cancel, handler: nil)
+        
+        alert.addAction(okAction)
+        alert.addAction(cancelAction)
+        
+        selectedRating = 0
+        
+        alert.view.addSubview(ratingView)
+        ratingView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            ratingView.topAnchor.constraint(equalTo: alert.view.topAnchor, constant: 70),
+            ratingView.centerXAnchor.constraint(equalTo: alert.view.centerXAnchor),
+            ratingView.bottomAnchor.constraint(equalTo: alert.view.bottomAnchor, constant: -30),
+            ratingView.widthAnchor.constraint(equalToConstant: 240),
+            ratingView.heightAnchor.constraint(equalToConstant: 84)
+        ])
+        
+        present(alert, animated: true, completion: nil)
+        
+        // Adding rating view to action buttons
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(ratingViewTapped(_:)))
+        ratingView.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc func ratingViewTapped(_ gestureRecognizer: UITapGestureRecognizer) {
+        // Prevent the tap from dismissing the alert
+        gestureRecognizer.isEnabled = false
+    }
+    
+    func ratingView(_ ratingView: RatingView, didUpdateRating rating: Int) {
+        selectedRating = rating
+        // Do something with the selected rating
+        print("Selected rating: \(rating)")
+    }
+    
+    private func starsString(for rating: Int) -> String {
+        // Créer une chaîne de caractères composée d'étoiles en fonction de la valeur de l'évaluation
+        return String(repeating: "⭐️", count: rating)
     }
 }
 
@@ -117,7 +168,7 @@ extension RestaurantDetailVC {
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         descriptionLabel.text       = restaurant?.description
         descriptionLabel.textColor  = .label
-        descriptionLabel.numberOfLines = 5
+        descriptionLabel.numberOfLines = 4
         descriptionLabel.lineBreakMode = .byTruncatingTail
         
         /// addressLabel
@@ -145,12 +196,21 @@ extension RestaurantDetailVC {
         phoneText.text      = restaurant?.phone
         phoneText.textColor = .label
         
+        /// ratingText
+        ratingText.translatesAutoresizingMaskIntoConstraints = false
+        ratingText.text          = ""
+        ratingText.textColor     = .label
+        ratingText.font          = UIFont.boldSystemFont(ofSize: 20.0)
+        
         /// mapView
         mapView.translatesAutoresizingMaskIntoConstraints = false
         mapView.layer.cornerRadius = 20
         mapView.clipsToBounds = true
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(mapTapped(_:)))
         mapView.addGestureRecognizer(tapGesture)
+        
+        /// rateButton
+        rateButton.addTarget(self, action: #selector(handleRateButton), for: .touchUpInside)
     }
     
     private func layout() {
@@ -166,29 +226,31 @@ extension RestaurantDetailVC {
         view.addSubview(addressText)
         view.addSubview(phoneLabel)
         view.addSubview(phoneText)
+        view.addSubview(ratingText)
         view.addSubview(mapView)
+        view.addSubview(rateButton)
         
         /// thumbnailImageView
         NSLayoutConstraint.activate([
             thumbnailImageView.topAnchor.constraint(equalTo: view.topAnchor),
             thumbnailImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             thumbnailImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            thumbnailImageView.heightAnchor.constraint(equalToConstant: 350),
+            thumbnailImageView.heightAnchor.constraint(equalToConstant: 300),
         ])
         
         /// heartButton
         NSLayoutConstraint.activate([
-            heartButton.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 2),
+            heartButton.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 0),
             heartButton.trailingAnchor.constraint(equalToSystemSpacingAfter: view.layoutMarginsGuide.trailingAnchor, multiplier: -2),
-            heartButton.widthAnchor.constraint(equalToConstant: 30),
-            heartButton.heightAnchor.constraint(equalToConstant: 30),
+            heartButton.widthAnchor.constraint(equalToConstant: 50),
+            heartButton.heightAnchor.constraint(equalToConstant: 50),
         ])
         
         /// stackView
         NSLayoutConstraint.activate([
             stackView.bottomAnchor.constraint(equalTo: thumbnailImageView.bottomAnchor, constant: -10),
             stackView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
-            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -120),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -80),
         ])
         
         /// descriptionLabel
@@ -227,12 +289,27 @@ extension RestaurantDetailVC {
             view.trailingAnchor.constraint(equalToSystemSpacingAfter: phoneText.leadingAnchor, multiplier: 2),
         ])
         
+        /// ratingText
+        NSLayoutConstraint.activate([
+            ratingText.topAnchor.constraint(equalToSystemSpacingBelow: phoneText.bottomAnchor, multiplier: 1),
+            ratingText.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
+            view.trailingAnchor.constraint(equalToSystemSpacingAfter: ratingText.leadingAnchor, multiplier: 2),
+        ])
+        
         /// mapView
         NSLayoutConstraint.activate([
-            mapView.topAnchor.constraint(equalTo: phoneText.bottomAnchor, constant: 10),
-            mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-            mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            mapView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0)
+            mapView.topAnchor.constraint(equalToSystemSpacingBelow: ratingText.bottomAnchor, multiplier: 3),
+            mapView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
+            view.trailingAnchor.constraint(equalToSystemSpacingAfter: mapView.trailingAnchor, multiplier: 2),
+        ])
+        
+        /// rateButton
+        NSLayoutConstraint.activate([
+            rateButton.topAnchor.constraint(equalToSystemSpacingBelow: mapView.bottomAnchor, multiplier: 3),
+            rateButton.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
+            view.trailingAnchor.constraint(equalToSystemSpacingAfter: rateButton.trailingAnchor, multiplier: 2),
+            rateButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 3),
+            rateButton.heightAnchor.constraint(equalToConstant: 45),
         ])
     }
 }

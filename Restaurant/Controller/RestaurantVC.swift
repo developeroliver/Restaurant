@@ -42,6 +42,7 @@ class RestaurantVC: UIViewController {
     // MARK: - LifeCycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         if let appearance = navigationController?.navigationBar.standardAppearance
         {
             appearance.backgroundColor = .systemBackground
@@ -98,7 +99,6 @@ extension RestaurantVC {
                 cell.backgroundColor = .clear
                 cell.set(restaurant: restaurant)
                 cell.favoriteImageView.isHidden = restaurant.isFavorite ? false : true
-                cell.sharedButton.addTarget(self, action: #selector(self.handleSharedButton), for: .touchUpInside)
                 
                 return cell
             }
@@ -119,33 +119,6 @@ extension RestaurantVC {
         dataSource.apply(snapshot, animatingDifferences: false)
     }
     
-    @objc func handleSharedButton(_ sender: AnyObject) {
-        // Get the selected row
-        let buttonPosition = sender.convert(CGPoint.zero, to: tableView)
-        
-        guard tableView.indexPathForRow(at: buttonPosition) != nil else {
-            return
-        }
-        
-        // Display the share menu
-        let shareMenu = UIAlertController(title: nil, message: "Partager sur ", preferredStyle: .actionSheet)
-        
-        // Add actions for Facebook, Twitter, Instagram, and Cancel
-        let facebookAction = UIAlertAction(title: "Facebook", style: .default, handler: nil)
-        let twitterAction = UIAlertAction(title: "Twitter", style: .default, handler: nil)
-        let instagramAction = UIAlertAction(title: "Instagram", style: .default, handler: nil)
-        let cancelAction = UIAlertAction(title: "Annuler", style: .cancel, handler: nil)
-        
-        // Add actions to the share menu
-        shareMenu.addAction(facebookAction)
-        shareMenu.addAction(twitterAction)
-        shareMenu.addAction(instagramAction)
-        shareMenu.addAction(cancelAction)
-        
-        // Present the share menu
-        self.present(shareMenu, animated: true, completion: nil)
-    }
-    
     @objc func addButtonTapped() {
         let alert = UIAlertController(title: "Fonctionnalité non disponible", message: "Cette fonctionnalité n'est pas encore disponible.", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
@@ -156,8 +129,9 @@ extension RestaurantVC {
     
     
     @objc func handleIsFavorite() {
-        print("Handle is favorite")
+        print("foo - OK")
     }
+
     
     private func delete(restaurant: Restaurant) {
         if let index = restaurants.firstIndex(where: { $0.name == restaurant.name }) {
@@ -177,7 +151,7 @@ extension RestaurantVC: UITableViewDelegate {
         let detailVC = RestaurantDetailVC()
         
         let heartImage = info.isFavorite ? "heart.fill" : "heart"
-        detailVC.heartButton.tintColor = info.isFavorite ? .systemYellow : .white
+        detailVC.heartButton.tintColor = info.isFavorite ? .systemPink : .white
         detailVC.heartButton.setImage(UIImage(systemName: heartImage), for: .normal)
         detailVC.heartButton.addTarget(self, action: #selector(handleIsFavorite), for: .touchUpInside)
         
@@ -238,7 +212,7 @@ extension RestaurantVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         /// Get the selected restaurant
-        guard let restaurant = self.dataSource.itemIdentifier(for: indexPath) else {
+        guard self.dataSource.itemIdentifier(for: indexPath) != nil else {
             return UISwipeActionsConfiguration()
         }
         

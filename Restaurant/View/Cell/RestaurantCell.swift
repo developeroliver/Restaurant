@@ -17,7 +17,6 @@ class RestaurantCell: UITableViewCell {
     let locationLabel       = UILabel()
     let typeLabel           = UILabel()
     let favoriteImageView   = UIImageView()
-    let sharedButton        = UIButton(type: .system)
     
     // MARK: -  LifeCycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -73,21 +72,12 @@ extension RestaurantCell {
         favoriteImageView.translatesAutoresizingMaskIntoConstraints = false
         favoriteImageView.image = UIImage(systemName: "heart.fill")
         favoriteImageView.tintColor = .systemYellow
-        
-        /// sharedButton
-        sharedButton.translatesAutoresizingMaskIntoConstraints = false
-        sharedButton.setImage(UIImage(named: "share"), for: .normal)
-        sharedButton.tintColor = .secondaryLabel
-        
     }
     
     private func layout() {
         addSubview(thumbnailImageView)
         addSubview(stackView)
         addSubview(favoriteImageView)
-        addSubview(sharedButton)
-        contentView.addSubview(sharedButton)
-        contentView.bringSubviewToFront(sharedButton)
         
         stackView.addArrangedSubview(nameLabel)
         stackView.addArrangedSubview(locationLabel)
@@ -109,19 +99,10 @@ extension RestaurantCell {
             trailingAnchor.constraint(equalToSystemSpacingAfter: stackView.trailingAnchor, multiplier: 2),
         ])
         
-        /// sharedButton
-        NSLayoutConstraint.activate([
-            sharedButton.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 1),
-            sharedButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -25),
-            sharedButton.widthAnchor.constraint(equalToConstant: 20),
-            sharedButton.heightAnchor.constraint(equalToConstant: 20),
-        ])
-        
-        
         /// favoriteImageView
         NSLayoutConstraint.activate([
-            favoriteImageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -55),
-            favoriteImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            favoriteImageView.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 0),
+            trailingAnchor.constraint(equalToSystemSpacingAfter: favoriteImageView.leadingAnchor, multiplier: 4),
             favoriteImageView.widthAnchor.constraint(equalToConstant: 25),
             favoriteImageView.heightAnchor.constraint(equalToConstant: 25),
         ])
