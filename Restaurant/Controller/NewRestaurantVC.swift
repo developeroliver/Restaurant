@@ -21,6 +21,10 @@ class NewRestaurantVC: UIViewController {
         super.viewDidLoad()
         
         style()
+        let leftButton = UIBarButtonItem(title: "Titre", style: .plain, target: self, action: #selector(leftButtonTapped))
+
+            // Assigner le bouton à la barre de navigation
+            navigationItem.leftBarButtonItem = leftButton
     }
 }
 
@@ -28,7 +32,6 @@ class NewRestaurantVC: UIViewController {
 extension NewRestaurantVC {
     
     private func style() {
-        
         tableView.dataSource = self
         tableView.delegate = self
         tableView.frame = view.bounds
@@ -41,6 +44,7 @@ extension NewRestaurantVC {
 
 // MARK: - Our Action Button and Logic
 extension NewRestaurantVC {
+    
     @objc func buttonTapped() {
         let alert = UIAlertController(title: "Fonctionnalité non disponible", message: "Cette fonctionnalité n'est pas encore disponible.", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
@@ -68,6 +72,10 @@ extension NewRestaurantVC {
         case 5: return "Entrer la description"
         default: return ""
         }
+    }
+    
+    @objc private func leftButtonTapped() {
+        dismiss(animated: true)
     }
 }
 
@@ -97,7 +105,9 @@ extension NewRestaurantVC: UITableViewDataSource, UITableViewDelegate {
             thumbnailImageView.clipsToBounds = true
             thumbnailImageView.backgroundColor = .systemGray6
             thumbnailImageView.layer.cornerRadius = 20
+            
             stackView.addArrangedSubview(thumbnailImageView)
+            
             NSLayoutConstraint.activate([
                 thumbnailImageView.topAnchor.constraint(equalTo: stackView.topAnchor),
                 thumbnailImageView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
@@ -112,6 +122,7 @@ extension NewRestaurantVC: UITableViewDataSource, UITableViewDelegate {
             
             let textField = UITextField()
             textField.borderStyle = .roundedRect
+            textField.backgroundColor = .secondarySystemBackground
             textField.placeholder = getPlaceholder(forRow: indexPath.row)
             stackView.addArrangedSubview(textField)
         case 5:
@@ -155,10 +166,18 @@ extension NewRestaurantVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 60))
         headerView.backgroundColor = .systemBackground
         
-        let titleLabel = UILabel(frame: CGRect(x: 20, y: 10, width: tableView.frame.width - 40, height: 40))
+        let backButton = UIButton(type: .system)
+        backButton.frame = CGRect(x: 10, y: -10, width: 20, height: 20)
+        backButton.setImage(UIImage(systemName: "xmark"), for: .normal)
+        backButton.tintColor = .label
+        backButton.addTarget(self, action: #selector(leftButtonTapped), for: .touchUpInside)
+        headerView.addSubview(backButton)
+        
+        let titleLabel = UILabel(frame: CGRect(x: 50, y: 10, width: tableView.frame.width - 40, height: 40))
         titleLabel.text = "Nouveau lieu"
         titleLabel.font = UIFont(name: "Nunito-Bold", size: 40.0)
         titleLabel.textColor = UIColor(named: "NavigationBarTitle")
@@ -229,6 +248,7 @@ extension NewRestaurantVC: UIImagePickerControllerDelegate, UINavigationControll
             thumbnailImageView.image = selectedImage
             thumbnailImageView.contentMode = .scaleAspectFill
             thumbnailImageView.clipsToBounds = true
+            thumbnailImageView.heightAnchor.constraint(equalToConstant: 200).isActive = true
         }
         
         dismiss(animated: true, completion: nil)
