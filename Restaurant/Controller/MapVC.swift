@@ -13,7 +13,7 @@ class MapVC: UIViewController {
     var restaurant = Restaurant()
     let mapView = MKMapView()
     
-    /// LifeCycle
+    /// LifeCycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -93,6 +93,7 @@ extension MapVC {
 // MARK: - MKMapViewDelegate
 extension MapVC: MKMapViewDelegate {
     
+    // MARK: - viewFor
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         let identifier = "MyMarker"
         

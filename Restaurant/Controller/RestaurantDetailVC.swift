@@ -112,6 +112,42 @@ extension RestaurantDetailVC {
         // Créer une chaîne de caractères composée d'étoiles en fonction de la valeur de l'évaluation
         return String(repeating: "⭐️", count: rating)
     }
+    
+    @objc func mapTapped(_ gestureRecognizer: UITapGestureRecognizer) {
+        if gestureRecognizer.state == .ended {
+            
+            let destination = MapVC()
+            destination.restaurant = restaurant!
+            navigationController?.pushViewController(destination, animated: true)
+        }
+    }
+    
+    private func configure(location: String) {
+        // Get location
+        let geoCoder = CLGeocoder()
+        
+        geoCoder.geocodeAddressString(location, completionHandler: { placemarks, error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            
+            if let placemarks = placemarks {
+                // Get the first placemark
+                let placemark = placemarks[0]
+                // Add annotation
+                let annotation = MKPointAnnotation()
+                if let location = placemark.location {
+                    // Display the annotation
+                    annotation.coordinate = location.coordinate
+                    self.mapView.addAnnotation(annotation)
+                    // Set the zoom level
+                    let region = MKCoordinateRegion(center: annotation.coordinate, latitudinalMeters: 250, longitudinalMeters: 250)
+                    self.mapView.setRegion(region, animated: false)
+                }
+            }
+        })
+    }
 }
 
 // MARK: - Our Style and Layout
@@ -312,42 +348,4 @@ extension RestaurantDetailVC {
     }
 }
 
-// MARK: - Our Action Button and Logic
-extension RestaurantDetailVC {
-    
-    @objc func mapTapped(_ gestureRecognizer: UITapGestureRecognizer) {
-        if gestureRecognizer.state == .ended {
-            
-            let destination = MapVC()
-            destination.restaurant = restaurant!
-            navigationController?.pushViewController(destination, animated: true)
-        }
-    }
-    
-    private func configure(location: String) {
-        // Get location
-        let geoCoder = CLGeocoder()
-        
-        geoCoder.geocodeAddressString(location, completionHandler: { placemarks, error in
-            if let error = error {
-                print(error.localizedDescription)
-                return
-            }
-            
-            if let placemarks = placemarks {
-                // Get the first placemark
-                let placemark = placemarks[0]
-                // Add annotation
-                let annotation = MKPointAnnotation()
-                if let location = placemark.location {
-                    // Display the annotation
-                    annotation.coordinate = location.coordinate
-                    self.mapView.addAnnotation(annotation)
-                    // Set the zoom level
-                    let region = MKCoordinateRegion(center: annotation.coordinate, latitudinalMeters: 250, longitudinalMeters: 250)
-                    self.mapView.setRegion(region, animated: false)
-                }
-            }
-        })
-    }
-}
+

@@ -65,6 +65,38 @@ class RestaurantVC: UIViewController {
     }
 }
 
+// MARK: - Our Action Button and Logic
+extension RestaurantVC {
+    
+    private func setupInitialSnapshot() {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, Restaurant>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(restaurants, toSection: 0)
+        
+        dataSource.apply(snapshot, animatingDifferences: false)
+    }
+    
+    @objc func addButtonTapped() {
+        let addRestaurant = NewRestaurantVC()
+        present(addRestaurant, animated: true)
+    }
+    
+    
+    @objc func handleIsFavorite() {
+        print("foo - OK")
+    }
+
+    
+    private func delete(restaurant: Restaurant) {
+        if let index = restaurants.firstIndex(where: { $0.name == restaurant.name }) {
+            restaurants.remove(at: index)
+            var snapshot = dataSource.snapshot()
+            snapshot.deleteItems([restaurant])
+            dataSource.apply(snapshot, animatingDifferences: true)
+        }
+    }
+}
+
 // MARK: - Our Style and Layout
 extension RestaurantVC {
     
@@ -108,41 +140,10 @@ extension RestaurantVC {
     }
 }
 
-// MARK: - Our Action Button and Logic
-extension RestaurantVC {
-    
-    private func setupInitialSnapshot() {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, Restaurant>()
-        snapshot.appendSections([0])
-        snapshot.appendItems(restaurants, toSection: 0)
-        
-        dataSource.apply(snapshot, animatingDifferences: false)
-    }
-    
-    @objc func addButtonTapped() {
-        let addRestaurant = NewRestaurantVC()
-        present(addRestaurant, animated: true)
-    }
-    
-    
-    @objc func handleIsFavorite() {
-        print("foo - OK")
-    }
-
-    
-    private func delete(restaurant: Restaurant) {
-        if let index = restaurants.firstIndex(where: { $0.name == restaurant.name }) {
-            restaurants.remove(at: index)
-            var snapshot = dataSource.snapshot()
-            snapshot.deleteItems([restaurant])
-            dataSource.apply(snapshot, animatingDifferences: true)
-        }
-    }
-}
-
 // MARK: - UITableViewDelegate
 extension RestaurantVC: UITableViewDelegate {
     
+    // MARK: - didSelectRowAt
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let info = restaurants[indexPath.row]
         let detailVC = RestaurantDetailVC()
@@ -156,6 +157,7 @@ extension RestaurantVC: UITableViewDelegate {
         navigationController?.pushViewController(detailVC, animated: true)
     }
     
+    // MARK: - trailingSwipeActionsConfigurationForRowAt
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         /// Get the selected restaurant
@@ -206,6 +208,7 @@ extension RestaurantVC: UITableViewDelegate {
         return swipeConfiguration
     }
     
+    // MARK: - leadingSwipeActionsConfigurationForRowAt
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         /// Get the selected restaurant
@@ -235,6 +238,7 @@ extension RestaurantVC: UITableViewDelegate {
         return swipeConfiguration
     }
     
+    // MARK: - willDisplay
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
         if restaurantShown[indexPath.row] {
@@ -253,9 +257,4 @@ extension RestaurantVC: UITableViewDelegate {
             cell.layer.transform = CATransform3DIdentity
         }, completion: nil)
     }
-}
-
-#Preview {
-    let vc = RestaurantVC()
-    return vc
 }

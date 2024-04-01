@@ -17,14 +17,25 @@ class NewRestaurantVC: UIViewController {
         return imageView
     }()
     
+    /// LifeCycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
         style()
-        let leftButton = UIBarButtonItem(title: "Titre", style: .plain, target: self, action: #selector(leftButtonTapped))
-
-            // Assigner le bouton à la barre de navigation
-            navigationItem.leftBarButtonItem = leftButton
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        let indexPath = IndexPath(row: 0, section: 0)
+        tableView.scrollToRow(at: indexPath, at: .top, animated: false)
     }
 }
 
@@ -52,6 +63,23 @@ extension NewRestaurantVC {
         present(alert, animated: true, completion: nil)
     }
     
+    @objc private func leftButtonTapped() {
+        dismiss(animated: true)
+    }
+    
+    @objc func keyboardWillShow(notification: Notification) {
+        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+        
+        let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyboardSize.height, right: 0.0)
+        tableView.contentInset = contentInsets
+        tableView.scrollIndicatorInsets = contentInsets
+    }
+    
+    @objc func keyboardWillHide(notification: Notification) {
+        tableView.contentInset = .zero
+        tableView.scrollIndicatorInsets = .zero
+    }
+    
     func getTitle(forRow row: Int) -> String {
         switch row {
         case 1: return "Nom"
@@ -73,20 +101,18 @@ extension NewRestaurantVC {
         default: return ""
         }
     }
-    
-    @objc private func leftButtonTapped() {
-        dismiss(animated: true)
-    }
 }
 
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
 extension NewRestaurantVC: UITableViewDataSource, UITableViewDelegate {
     
+    // MARK: - numberOfRowsInSection
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 6
     }
     
+    // MARK: - CellForRowAt
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         cell.contentView.subviews.forEach { $0.removeFromSuperview() } // Réinitialiser les sous-vues de la cellule
@@ -108,25 +134,62 @@ extension NewRestaurantVC: UITableViewDataSource, UITableViewDelegate {
             
             stackView.addArrangedSubview(thumbnailImageView)
             
+            /// thumbnailImageView
             NSLayoutConstraint.activate([
                 thumbnailImageView.topAnchor.constraint(equalTo: stackView.topAnchor),
-                thumbnailImageView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
-                thumbnailImageView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
+                thumbnailImageView.centerXAnchor.constraint(equalTo: stackView.centerXAnchor),
                 thumbnailImageView.heightAnchor.constraint(equalToConstant: 200),
             ])
-        case 1...4:
-            // Configurer les autres éléments de la cellule
-            let titleLabel = UILabel()
-            titleLabel.text = getTitle(forRow: indexPath.row)
-            stackView.addArrangedSubview(titleLabel)
+        case 1:
+            let nameLabel = UILabel()
+            nameLabel.text = "Nom"
+            stackView.addArrangedSubview(nameLabel)
             
-            let textField = UITextField()
-            textField.borderStyle = .roundedRect
-            textField.backgroundColor = .secondarySystemBackground
-            textField.placeholder = getPlaceholder(forRow: indexPath.row)
-            stackView.addArrangedSubview(textField)
+            let nameTextField = UITextField()
+            nameTextField.borderStyle = .roundedRect
+            nameTextField.backgroundColor = .secondarySystemBackground
+            nameTextField.placeholder = "Entrer un nom"
+            nameTextField.tag = 1
+            nameTextField.delegate = self
+            stackView.addArrangedSubview(nameTextField)
+        case 2:
+            let typeLabel = UILabel()
+            typeLabel.text = "Type"
+            stackView.addArrangedSubview(typeLabel)
+            
+            let typeTextField = UITextField()
+            typeTextField.borderStyle = .roundedRect
+            typeTextField.backgroundColor = .secondarySystemBackground
+            typeTextField.placeholder = "Entrer un type"
+            typeTextField.tag = 2
+            typeTextField.delegate = self
+            stackView.addArrangedSubview(typeTextField)
+        case 3:
+            let addressLabel = UILabel()
+            addressLabel.text = "Adress"
+            stackView.addArrangedSubview(addressLabel)
+            
+            let addressTextField = UITextField()
+            addressTextField.borderStyle = .roundedRect
+            addressTextField.backgroundColor = .secondarySystemBackground
+            addressTextField.placeholder = "Entrer une addresse"
+            addressTextField.tag = 3
+            addressTextField.delegate = self
+            stackView.addArrangedSubview(addressTextField)
+        case 4:
+            let phoneLabel = UILabel()
+            phoneLabel.text = "Téléphone"
+            stackView.addArrangedSubview(phoneLabel)
+            
+            let phoneTextField = UITextField()
+            phoneTextField.borderStyle = .roundedRect
+            phoneTextField.backgroundColor = .secondarySystemBackground
+            phoneTextField.placeholder = "Entrer un numéro de téléphone"
+            phoneTextField.keyboardType = .phonePad
+            phoneTextField.tag = 4
+            phoneTextField.delegate = self
+            stackView.addArrangedSubview(phoneTextField)
         case 5:
-            // Configurer les autres éléments de la cellule
             let titleLabel = UILabel()
             titleLabel.text = getTitle(forRow: indexPath.row)
             stackView.addArrangedSubview(titleLabel)
@@ -137,6 +200,7 @@ extension NewRestaurantVC: UITableViewDataSource, UITableViewDelegate {
             descriptionTextView.layer.masksToBounds = true
             descriptionTextView.layer.borderColor = UIColor.gray.cgColor
             descriptionTextView.textContainer.maximumNumberOfLines = 5
+            descriptionTextView.tag = 5
             descriptionTextView.textContainer.lineBreakMode = .byTruncatingTail
             descriptionTextView.contentMode = .top
             descriptionTextView.backgroundColor = .systemGray6
@@ -145,16 +209,18 @@ extension NewRestaurantVC: UITableViewDataSource, UITableViewDelegate {
             break
         }
         
+        /// stackView
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: cell.contentView.topAnchor, constant: 8),
             stackView.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 20),
-            stackView.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -8),
+            stackView.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -20),
             stackView.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor, constant: -8)
         ])
         
         return cell
     }
     
+    // MARK: - heightForRowAt
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == 0 {
             return 200
@@ -165,13 +231,14 @@ extension NewRestaurantVC: UITableViewDataSource, UITableViewDelegate {
         }
     }
     
+    // MARK: - Header View Section
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 60))
         headerView.backgroundColor = .systemBackground
         
         let backButton = UIButton(type: .system)
-        backButton.frame = CGRect(x: 10, y: -10, width: 20, height: 20)
+        backButton.frame = CGRect(x: 20, y: -5, width: 20, height: 20)
         backButton.setImage(UIImage(systemName: "xmark"), for: .normal)
         backButton.tintColor = .label
         backButton.addTarget(self, action: #selector(leftButtonTapped), for: .touchUpInside)
@@ -193,15 +260,19 @@ extension NewRestaurantVC: UITableViewDataSource, UITableViewDelegate {
         return headerView
     }
     
+    
+    // MARK: - Heigh for Header View Section
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 60
     }
     
+    // MARK: - didSelectRowAt
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.row == 0 {
             let photoSourceRequestController = UIAlertController(title: nil, message: "Choose your photo source", preferredStyle: .actionSheet)
             
+            /// Camera
             let cameraAction = UIAlertAction(title: "Camera", style: .default) { (action) in
                 if UIImagePickerController.isSourceTypeAvailable(.camera) {
                     let imagePicker = UIImagePickerController()
@@ -212,6 +283,7 @@ extension NewRestaurantVC: UITableViewDataSource, UITableViewDelegate {
                 }
             }
             
+            /// Photo Library
             let photoLibraryAction = UIAlertAction(title: "Photo Library", style: .default) { (action) in
                 if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
                     let imagePicker = UIImagePickerController()
@@ -240,6 +312,7 @@ extension NewRestaurantVC: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
+// MARK: - UIImagePickerControllerDelegate, UINavigationControllerDelegate
 extension NewRestaurantVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -255,3 +328,14 @@ extension NewRestaurantVC: UIImagePickerControllerDelegate, UINavigationControll
     }
 }
 
+// MARK: - UITextFieldDelegate
+extension NewRestaurantVC:  UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if let nextTextField = view.viewWithTag(textField.tag + 1) {
+            textField.resignFirstResponder()
+            nextTextField.becomeFirstResponder()
+        }
+        
+        return true
+    }
+}

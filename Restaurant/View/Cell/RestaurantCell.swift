@@ -25,16 +25,25 @@ class RestaurantCell: UITableViewCell {
         layout()
     }
     
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         
         self.tintColor = .systemYellow
     }
     
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+// MARK: - Our Action Button andLogic
+extension RestaurantCell {
+    
+    func set(restaurant: Restaurant) {
+        thumbnailImageView.image    = UIImage(named: restaurant.image)
+        nameLabel.text              = restaurant.name
+        locationLabel.text          = restaurant.location
+        typeLabel.text              = restaurant.type
     }
 }
 
@@ -109,18 +118,4 @@ extension RestaurantCell {
     }
 }
 
-// MARK: - Our Action Button andLogic
-extension RestaurantCell {
-    
-    func set(restaurant: Restaurant) {
-        thumbnailImageView.image    = UIImage(named: restaurant.image)
-        nameLabel.text              = restaurant.name
-        locationLabel.text          = restaurant.location
-        typeLabel.text              = restaurant.type
-    }
-}
 
-#Preview {
-    let vc = RestaurantCell()
-    return vc
-}

@@ -9,11 +9,11 @@ import UIKit
 
 class CustomButton: UIButton {
     
+    /// LifeCycle Methods
     override init(frame: CGRect) {
         super.init(frame: frame)
         configure()
     }
-    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -27,7 +27,6 @@ class CustomButton: UIButton {
         configure()
     }
     
-    
     private func configure() {
         translatesAutoresizingMaskIntoConstraints = false
         layer.cornerRadius      = 25
@@ -35,7 +34,6 @@ class CustomButton: UIButton {
         titleLabel?.font        = UIFont.preferredFont(forTextStyle: .headline)
         
     }
-    
     
     func set(backgroundColor: UIColor, title: String) {
         self.backgroundColor = backgroundColor

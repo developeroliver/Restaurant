@@ -9,6 +9,7 @@ import UIKit
 
 class MainTabBarVC: UITabBarController {
     
+    /// LifeCycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         UITabBar.appearance().tintColor = .systemOrange
