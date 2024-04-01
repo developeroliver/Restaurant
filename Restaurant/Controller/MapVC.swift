@@ -1,5 +1,5 @@
 //
-//  MapViewController.swift
+//  MapVC.swift
 //  Restaurant
 //
 //  Created by olivier geiger on 29/03/2024.
@@ -8,7 +8,7 @@
 import UIKit
 import MapKit
 
-class MapViewController: UIViewController {
+class MapVC: UIViewController {
     
     var restaurant = Restaurant()
     let mapView = MKMapView()
@@ -24,7 +24,7 @@ class MapViewController: UIViewController {
 }
 
 // MARK: - Our Action Button and Logic
-extension MapViewController {
+extension MapVC {
     
     private func setupBackButton() {
         let backButtonImage = UIImage(systemName: "arrow.backward", withConfiguration: UIImage.SymbolConfiguration(pointSize: 20.0, weight: .bold))
@@ -39,7 +39,7 @@ extension MapViewController {
 }
 
 // MARK: - Our Style and Layout
-extension MapViewController {
+extension MapVC {
     
     private func style() {
         mapView.translatesAutoresizingMaskIntoConstraints = false
@@ -91,7 +91,7 @@ extension MapViewController {
 }
 
 // MARK: - MKMapViewDelegate
-extension MapViewController: MKMapViewDelegate {
+extension MapVC: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         let identifier = "MyMarker"

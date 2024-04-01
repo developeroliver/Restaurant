@@ -1,5 +1,5 @@
 //
-//  DiscoverViewController.swift
+//  DiscoverVC.swift
 //  Restaurant
 //
 //  Created by olivier geiger on 30/03/2024.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class DiscoverViewController: UIViewController {
+class DiscoverVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

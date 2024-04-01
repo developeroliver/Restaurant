@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  RestaurantVC.swift
 //  Restaurant
 //
 //  Created by olivier geiger on 24/03/2024.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class RestaurantViewController: UIViewController {
+class RestaurantVC: UIViewController {
     
     var selectedIndexPath: IndexPath?
     private var dataSource: UITableViewDiffableDataSource<Int, Restaurant>!
@@ -66,7 +66,7 @@ class RestaurantViewController: UIViewController {
 }
 
 // MARK: - Our Style and Layout
-extension RestaurantViewController {
+extension RestaurantVC {
     
     private func style() {
         view.backgroundColor = .systemBackground
@@ -109,7 +109,7 @@ extension RestaurantViewController {
 }
 
 // MARK: - Our Action Button and Logic
-extension RestaurantViewController {
+extension RestaurantVC {
     
     private func setupInitialSnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<Int, Restaurant>()
@@ -120,11 +120,8 @@ extension RestaurantViewController {
     }
     
     @objc func addButtonTapped() {
-        let alert = UIAlertController(title: "Fonctionnalité non disponible", message: "Cette fonctionnalité n'est pas encore disponible.", preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-        alert.addAction(okAction)
-        present(alert, animated: true, completion: nil)
-        
+        let addRestaurant = NewRestaurantVC()
+        present(addRestaurant, animated: true)
     }
     
     
@@ -144,11 +141,11 @@ extension RestaurantViewController {
 }
 
 // MARK: - UITableViewDelegate
-extension RestaurantViewController: UITableViewDelegate {
+extension RestaurantVC: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let info = restaurants[indexPath.row]
-        let detailVC = RestaurantDetailViewController()
+        let detailVC = RestaurantDetailVC()
         
         let heartImage = info.isFavorite ? "heart.fill" : "heart"
         detailVC.heartButton.tintColor = info.isFavorite ? .systemPink : .white
@@ -252,13 +249,13 @@ extension RestaurantViewController: UITableViewDelegate {
         cell.layer.transform = leadingAnimation
         
         /// Define the final state (After the animation)
-        UIView.animate(withDuration: 0.3, delay: TimeInterval(indexPath.row) * 0.1, options: .curveEaseInOut, animations: {
+        UIView.animate(withDuration: 0.2, delay: TimeInterval(indexPath.row) * 0.1, options: .curveEaseOut, animations: {
             cell.layer.transform = CATransform3DIdentity
         }, completion: nil)
     }
 }
 
 #Preview {
-    let vc = RestaurantViewController()
+    let vc = RestaurantVC()
     return vc
 }

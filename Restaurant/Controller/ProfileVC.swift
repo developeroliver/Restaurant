@@ -1,5 +1,5 @@
 //
-//  ProfileViewController.swift
+//  ProfileVC.swift
 //  Restaurant
 //
 //  Created by olivier geiger on 30/03/2024.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ProfileViewController: UIViewController {
+class ProfileVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

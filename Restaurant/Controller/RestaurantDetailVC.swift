@@ -1,5 +1,5 @@
 //
-//  RestaurantDetailViewController.swift
+//  RestaurantDetailVC.swift
 //  Restaurant
 //
 //  Created by olivier geiger on 25/03/2024.
@@ -8,7 +8,7 @@
 import UIKit
 import MapKit
 
-class RestaurantDetailViewController: UIViewController, RatingViewDelegate {
+class RestaurantDetailVC: UIViewController, RatingViewDelegate {
     
     var restaurant: Restaurant?
     // ajout d'une variable
@@ -29,8 +29,6 @@ class RestaurantDetailViewController: UIViewController, RatingViewDelegate {
     let ratingText          = UILabel()
     let mapView             = MKMapView()
     let rateButton          = CustomButton(backgroundColor: UIColor(named: "NavigationBarTitle")!, title: "Évaluer")
-    let emojiPicker         = UIPickerView()
-    let emojis              = ["😍", "😎", "😃", "🥲", "😡"]
     let ratingView          = RatingView()
     
     // MARK: - LifeCycle Methods
@@ -45,7 +43,7 @@ class RestaurantDetailViewController: UIViewController, RatingViewDelegate {
 }
 
 // MARK: - Action Button and Logic
-extension RestaurantDetailViewController {
+extension RestaurantDetailVC {
     
     @objc func backButtonTapped() {
         navigationController?.popViewController(animated: true)
@@ -117,7 +115,7 @@ extension RestaurantDetailViewController {
 }
 
 // MARK: - Our Style and Layout
-extension RestaurantDetailViewController {
+extension RestaurantDetailVC {
     
     private func style() {
         view.backgroundColor = .systemBackground
@@ -235,7 +233,7 @@ extension RestaurantDetailViewController {
             thumbnailImageView.topAnchor.constraint(equalTo: view.topAnchor),
             thumbnailImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             thumbnailImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            thumbnailImageView.heightAnchor.constraint(equalToConstant: 300),
+            thumbnailImageView.heightAnchor.constraint(equalToConstant: 270),
         ])
         
         /// heartButton
@@ -298,29 +296,29 @@ extension RestaurantDetailViewController {
         
         /// mapView
         NSLayoutConstraint.activate([
-            mapView.topAnchor.constraint(equalToSystemSpacingBelow: ratingText.bottomAnchor, multiplier: 3),
+            mapView.topAnchor.constraint(equalToSystemSpacingBelow: ratingText.bottomAnchor, multiplier: 2),
             mapView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
             view.trailingAnchor.constraint(equalToSystemSpacingAfter: mapView.trailingAnchor, multiplier: 2),
         ])
         
         /// rateButton
         NSLayoutConstraint.activate([
-            rateButton.topAnchor.constraint(equalToSystemSpacingBelow: mapView.bottomAnchor, multiplier: 3),
+            rateButton.topAnchor.constraint(equalToSystemSpacingBelow: mapView.bottomAnchor, multiplier: 2),
             rateButton.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
             view.trailingAnchor.constraint(equalToSystemSpacingAfter: rateButton.trailingAnchor, multiplier: 2),
-            rateButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 3),
+            rateButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 2),
             rateButton.heightAnchor.constraint(equalToConstant: 45),
         ])
     }
 }
 
 // MARK: - Our Action Button and Logic
-extension RestaurantDetailViewController {
+extension RestaurantDetailVC {
     
     @objc func mapTapped(_ gestureRecognizer: UITapGestureRecognizer) {
         if gestureRecognizer.state == .ended {
             
-            let destination = MapViewController()
+            let destination = MapVC()
             destination.restaurant = restaurant!
             navigationController?.pushViewController(destination, animated: true)
         }
