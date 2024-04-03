@@ -10,7 +10,7 @@ import MapKit
 
 class RestaurantDetailVC: UIViewController, RatingViewDelegate {
     
-    var restaurant: Restaurant?
+    var restaurant: Restaurant = Restaurant()
     // ajout d'une variable
     var selectedRating: Int = 0
     
@@ -37,7 +37,7 @@ class RestaurantDetailVC: UIViewController, RatingViewDelegate {
         style()
         layout()
         setupBackButton()
-        configure(location: restaurant!.location)
+        configure(location: restaurant.location)
         ratingView.delegate = self
     }
 }
@@ -117,7 +117,7 @@ extension RestaurantDetailVC {
         if gestureRecognizer.state == .ended {
             
             let destination = MapVC()
-            destination.restaurant = restaurant!
+            destination.restaurant = restaurant
             navigationController?.pushViewController(destination, animated: true)
         }
     }
@@ -159,7 +159,7 @@ extension RestaurantDetailVC {
         
         /// thumbnailImageView
         thumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
-        thumbnailImageView.image = UIImage(named: restaurant!.image)
+        thumbnailImageView.image = restaurant.image
         thumbnailImageView.contentMode = .scaleAspectFill
         thumbnailImageView.clipsToBounds = true
         
@@ -175,7 +175,7 @@ extension RestaurantDetailVC {
         
         /// nameLabel
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        nameLabel.text          = restaurant?.name
+        nameLabel.text          = restaurant.name
         nameLabel.textColor     = .white
         nameLabel.layer.shadowOpacity = 0.5
         nameLabel.layer.shadowOffset = CGSize(width: 2, height: 2)
@@ -187,11 +187,11 @@ extension RestaurantDetailVC {
         
         /// locationLabel
         locationLabel.translatesAutoresizingMaskIntoConstraints = false
-        locationLabel.text = restaurant?.location
+        locationLabel.text = restaurant.location
         
         /// typeLabel
         typeLabel.translatesAutoresizingMaskIntoConstraints = false
-        typeLabel.text          = restaurant?.type
+        typeLabel.text          = restaurant.type
         typeLabel.textColor     = .white
         if let customFont = UIFont(name: "Nunito-Bold", size: 20.0) {
             typeLabel.font = UIFontMetrics(forTextStyle: .headline).scaledFont(for: customFont)
@@ -200,7 +200,7 @@ extension RestaurantDetailVC {
         
         /// descriptionLabel
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
-        descriptionLabel.text       = restaurant?.description
+        descriptionLabel.text       = restaurant.summary
         descriptionLabel.textColor  = .label
         descriptionLabel.numberOfLines = 4
         descriptionLabel.lineBreakMode = .byTruncatingTail
@@ -213,7 +213,7 @@ extension RestaurantDetailVC {
         
         /// addressText
         addressText.translatesAutoresizingMaskIntoConstraints = false
-        addressText.text                        = restaurant?.location
+        addressText.text                        = restaurant.location
         addressText.textColor                   = .label
         addressText.numberOfLines               = 2
         addressText.lineBreakMode               = .byTruncatingTail
@@ -227,7 +227,7 @@ extension RestaurantDetailVC {
         
         /// phoneText
         phoneText.translatesAutoresizingMaskIntoConstraints = false
-        phoneText.text      = restaurant?.phone
+        phoneText.text      = restaurant.phone
         phoneText.textColor = .label
         
         /// ratingText
@@ -274,7 +274,7 @@ extension RestaurantDetailVC {
         
         /// heartButton
         NSLayoutConstraint.activate([
-            heartButton.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 0),
+            heartButton.topAnchor.constraint(equalToSystemSpacingBelow: thumbnailImageView.topAnchor, multiplier: 5),
             heartButton.trailingAnchor.constraint(equalToSystemSpacingAfter: view.layoutMarginsGuide.trailingAnchor, multiplier: -2),
             heartButton.widthAnchor.constraint(equalToConstant: 50),
             heartButton.heightAnchor.constraint(equalToConstant: 50),

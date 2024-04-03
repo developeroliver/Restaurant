@@ -6,35 +6,21 @@
 //
 
 import UIKit
+import SwiftData
 
-class RestaurantVC: UIViewController {
+protocol RestaurantDataStore {
+    func fetchRestaurantData()
+    func updateSnapshot(animatingChange: Bool)
+}
+
+class RestaurantVC: UIViewController, RestaurantDataStore {
     
+    
+    var container: ModelContainer?
     var selectedIndexPath: IndexPath?
     private var dataSource: UITableViewDiffableDataSource<Int, Restaurant>!
     
-    var restaurants:[Restaurant] = [
-        Restaurant(name: "L'art du café", type: "Salon de Café et thé", location: "10 Allée François Mitterrand, 67400 Illkirch-Graffenstaden", image: "cafedeadend", isFavorite: false, phone: "03 88 43 06 77", description: "Café/Snack agréable pour la pause déjeuner. Carte simple, proposition de plat du jour. Si les plats ne sortent pas particulièrement de l'ordinaire, ils sont bien réalisés, avec des ingrédients frais et le plaisir est là."),
-        Restaurant(name: "Café Broglie", type: "Salon de Café", location: "1 Rue du Dôme, 67000 Strasbourg", image: "homei", isFavorite: false, phone: "03 88 32 08 08", description: "le Café Broglie se situe à quelques pas de l'Opéra et de la Cathédrale, c'est une étape incontournable et fait partie des lieux que les strasbourgeois fréquentes très souvent. Dans ce café brasserie, retrouvez une série de plats français composé par le chef de cuisine et son équipe. Tous les jours, découvrez également les suggestions sur ardoise. Pour finir venez déguster nos petits déjeuners."),
-        Restaurant(name: "Au Fond de la Théière", type: "Maison du thé", location: "32 Grande Rue, 67000 Strasbourg", image: "teakha", isFavorite: false, phone: "09 55 39 16 73", description: "Salon de thé convivial avec une salle intérieure et une terrasse. Le salon vous propose des thés/cafés accompagnés et pâtisseries préparées par un grand chef étoilé, des sandwichs chauds ou froids et des salades."),
-        Restaurant(name: "Le Café Monceau", type: "Salon de Café et thé", location: "154a Rte de Lyon, 67400 Illkirch-Graffenstaden", image: "cafeloisl", isFavorite: false, phone: "09 86 73 70 80", description: "Dans un cadre charmant et convivial et grâce à nos délicieux plats, nous convainquons nos clients dès leur première visite.  Le Café Monceau est un lieu de rencontre prisé pour le petit déjeuner, déjeuner ou l'apéro..."),
-        Restaurant(name: "Le chasseur", type: "Restaurant", location: "70 Rte de Lyon, 67400 Illkirch-Graffenstaden", image: "petiteoyster", isFavorite: false, phone: "03 88 66 77 69", description: "La cuisine française créée par un chef grandiose est magnifique à cet endroit. N'oubliez pas d'apprécier des tartes cuites à la perfection à ce restaurant. Les gourmets remarquent qu'un gâteau aux fruits est savoureux ici. Un vin délicieux rendra votre repas plus savoureux et vous fera surement revenir. Sur la base des opinions des visiteurs, les serveurs offrent un café immense ici."),
-        Restaurant(name: "Au vieux Strasbourg", type: "Restaurant", location: "5 Rue du Maroquin, 67000 Strasbourg", image: "forkee", isFavorite: false, phone: "03 88 32 41 89", description: "Restaurant à l'ambiance détendue doté de murs en lambris, servant des spécialités alsaciennes comme les spätzle et le foie gras."),
-        Restaurant(name: "Pains WŒRLÉ", type: "Boulangerie", location: "10 Rue de la Division Leclerc, 67000 Strasbourg", image: "posatelier", isFavorite: false, phone: "03 88 15 19 30", description: "Baguettes, pâtisseries et friandises alsaciennes (comme les bretzels ou le kougelhopf) vendues dans une boulangerie centenaire."),
-        Restaurant(name: "Boulangerie Beck", type: "Boulangerie", location: "267 Rte de Lyon, 67400 Illkirch-Graffenstaden", image: "bourkestreetbakery", isFavorite: false, phone: "03 88 66 12 99", description: "03 88 66 12 99"),
-        Restaurant(name: "Schaal chocolatier", type: "Salon de café", location: "Rue du Pont-du-Péage, 67118 Geispolsheim", image: "haigh", isFavorite: false, phone: "03 88 55 04 00", description: "SCHAAL confectionne une offre de succulents chocolats au service de ses clients partenaires qu’il s’agisse de marques de gourmandises renommées ou d’artisans commerçants disposant de boutiques raffinées. Ses recettes originelles telles que le praliné à l’ancienne font notre renommée en France et à l’international."),
-        Restaurant(name: "Au Hussard", type: "Salon de café", location: "30 Rue du Général Leclerc, 67540 Ostwald", image: "palomino", isFavorite: false, phone: "03 88 67 07 78", description: "La cuisine française est bien préparée à ce restaurant. Un café immense est ce qui peut vous faire revenir à Au Hussard - Chez Pino et Malou."),
-        Restaurant(name: "La Hache", type: "Restaurant", location: "11 Rue de la Douane, 67000 Strasbourg", image: "upstate", isFavorite: false, phone: "03 88 32 34 32", description: "La Hache est un des plus vieux établissements de la ville, un bistro moderne à l’ambiance complice, un lieu vivant, gourmand et chaleureux. On y sert à table ou au comptoir une cuisine maison, authentique, originale et inspirée. La carte des vins n’est pas en reste et propose grands classiques et vraies trouvailles."),
-        Restaurant(name: "Buffalo Grill", type: "Restauration rapide", location: "Rue de Lyon, N83, 67640 Fegersheim", image: "traif", isFavorite: false, phone: "03 88 59 06 09", description: "Chaîne de restaurants spécialisés en grillades et burgers, au décor de far west et à l’ambiance familiale."),
-        Restaurant(name: "La Croix de Savoie", type: "Restaurant", location: "133 Rte de Lyon, 67400 Illkirch-Graffenstaden", image: "graham", isFavorite: false, phone: "03 88 66 65 66", description: "Ce restaurant au cadre rustique et boisé sert des spécialités savoyardes telles que fondues et raclettes."),
-        Restaurant(name: "Café de l'Opéra", type: "Salon de café et thé", location: "19 Pl. Broglie, 67000 Strasbourg", image: "waffleandwolf", isFavorite: false, phone: "09 77 21 68 18", description: "Carte simple de viandes, pizzas ou salades dans une salle à la déco années 1930 ou sur la terrasse avec vue."),
-        Restaurant(name: "Café Atlantico", type: "Boulangerie", location: "9A Quai des Pêcheurs, 67000 Strasbourg", image: "fiveleaves", isFavorite: false, phone: "03 88 35 77 81", description: "Péniche convertie en élégante brasserie prisée pour les classiques du petit-déjeuner et du brunch comme la brioche."),
-        Restaurant(name: "Bella Vita", type: "Restaurant", location: "3 rue prechter 67000 Strasbourg", image: "confessional", isFavorite: false, phone: "03 88 96 88 10", description: "Après 15 ans d'ancienneté dans le milieu de la restauration et de la pizza, nous sommes ravis de vous accueillir dans notre restaurant la Bella Vita, où vous pourrez déguster d'excellentes pizzas mais aussi des tartes flambées faites maison, avec amour et passion."),
-        Restaurant(name: "Del Arte", type: "Restaurant", location: "Centre Commercial Auchan, 6 Avenue de Strasbourg 67400, ILLKIRCH GRAFFENSTADEN", image: "barrafina", isFavorite: false, phone: "03 88 39 70 99", description: "Que ce soit en cuisine, en salle ou au sein de l’encadrement, nous vous proposons de vivre l’aventure d’une enseigne en croissance. "),
-        Restaurant(name: "L'Impasto", type: "Restaurant", location: "154 Rte de Lyon, 67400 Illkirch-Graffenstaden", image: "donostia", isFavorite: false, phone: "03 88 40 78 35", description: "Pizza & panuozzo sur place et à emporter Pâte maison, farines bio, longue maturation. Sélection et respect des produits. Nous avons à coeur de vous proposer de l'artisanat de proximité"),
-        Restaurant(name: "Ô Brocomagus", type: "Restaurant", location: "67170 Brumath", image: "royaloak", isFavorite: false, phone: "03 88 64 20 93", description: "Patisserie, salon de thé, restauration plat du jour et suggestions par la maison Bernhard en face de la nouvelle médiathèque cour du château à brumath."),
-        Restaurant(name: "La Halle aux Blés", type: "Restaurant", location: "Pl. du Marché, 67210 Obernai", image: "cask", isFavorite: false, phone: "03 88 95 56 09", description: "Cuisine traditionnelle du terroir alsacien dans une ambiance de winstub typique au sein d'une bâtisse de 1553.")
-    ]
-    
+    var restaurants: [Restaurant] = []
     var restaurantIsFavorites       = Array(repeating: false, count: 21)
     lazy var restaurantShown        = [Bool](repeating: false, count: restaurants.count)
     let tableView                   = UITableView()
@@ -42,6 +28,8 @@ class RestaurantVC: UIViewController {
     // MARK: - LifeCycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        container = try? ModelContainer(for: Restaurant.self)
         
         if let appearance = navigationController?.navigationBar.standardAppearance
         {
@@ -52,16 +40,24 @@ class RestaurantVC: UIViewController {
             }
         }
         
+        restaurantShown = Array(repeating: false, count: restaurants.count)
+        
         style()
         dataSource = setupDataSource()
         setupInitialSnapshot()
+        
+        view.addSubview(tableView)
+        updateBackgroundImage()
+        fetchRestaurantData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        let indexPath = IndexPath(row: 0, section: 0)
-        tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+        if !restaurants.isEmpty {
+            let indexPath = IndexPath(row: 0, section: 0)
+            tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+        }
     }
 }
 
@@ -76,16 +72,40 @@ extension RestaurantVC {
         dataSource.apply(snapshot, animatingDifferences: false)
     }
     
-    @objc func addButtonTapped() {
+    private func updateBackgroundImage() {
+        if restaurants.isEmpty {
+            let emptyDataImageView = UIImageView(image: UIImage(named: "emptydata"))
+            emptyDataImageView.contentMode = .scaleAspectFit
+            tableView.backgroundView = emptyDataImageView
+        } else {
+            tableView.backgroundView = nil
+        }
+    }
+    
+    internal func fetchRestaurantData() {
+        let descriptor = FetchDescriptor<Restaurant>()
+        
+        restaurants = (try? container?.mainContext.fetch(descriptor)) ?? []
+        
+        updateSnapshot()
+    }
+    
+    internal func updateSnapshot(animatingChange: Bool = false) {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, Restaurant>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(restaurants, toSection: 0)
+        
+        dataSource.apply(snapshot, animatingDifferences: animatingChange)
+        
+        tableView.backgroundView?.isHidden = restaurants.count == 0 ? false : true
+    }
+    
+    @objc func addNewRestaurant() {
         let addRestaurant = NewRestaurantVC()
+        addRestaurant.dataStore = self
         present(addRestaurant, animated: true)
+        tableView.reloadData()
     }
-    
-    
-    @objc func handleIsFavorite() {
-        print("foo - OK")
-    }
-
     
     private func delete(restaurant: Restaurant) {
         if let index = restaurants.firstIndex(where: { $0.name == restaurant.name }) {
@@ -107,7 +127,7 @@ extension RestaurantVC {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .always
         
-        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped))
+        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewRestaurant))
         navigationItem.rightBarButtonItem = addButton
         addButton.tintColor = .label
         
@@ -149,9 +169,9 @@ extension RestaurantVC: UITableViewDelegate {
         let detailVC = RestaurantDetailVC()
         
         let heartImage = info.isFavorite ? "heart.fill" : "heart"
-        detailVC.heartButton.tintColor = info.isFavorite ? .systemPink : .white
+        
+        detailVC.heartButton.tintColor = info.isFavorite ? .systemYellow : .white
         detailVC.heartButton.setImage(UIImage(systemName: heartImage), for: .normal)
-        detailVC.heartButton.addTarget(self, action: #selector(handleIsFavorite), for: .touchUpInside)
         
         detailVC.restaurant = info
         navigationController?.pushViewController(detailVC, animated: true)
@@ -167,7 +187,16 @@ extension RestaurantVC: UITableViewDelegate {
         
         /// Delete action
         let deleteAction = UIContextualAction(style: .destructive, title: "Supprimer") { [weak self] (_, _, completionHandler) in
-            self?.delete(restaurant: restaurant)
+            if let restaurant = self?.dataSource.itemIdentifier(for: indexPath) {
+                
+                self?.container?.mainContext.delete(restaurant)
+                
+                if let index = self?.restaurants.firstIndex(where: { $0.name == restaurant.name }) {
+                    self?.restaurants.remove(at: index)
+                }
+                self?.updateSnapshot(animatingChange: true)
+            }
+            
             completionHandler(true)
         }
         
@@ -182,11 +211,7 @@ extension RestaurantVC: UITableViewDelegate {
             
             let activityController: UIActivityViewController
             
-            if let imageToShare = UIImage(named: restaurant.image) {
-                activityController = UIActivityViewController(activityItems: [defaultText, imageToShare], applicationActivities: nil)
-            } else {
-                activityController = UIActivityViewController(activityItems: [defaultText], applicationActivities: nil)
-            }
+            activityController = UIActivityViewController(activityItems: [defaultText, restaurant.image], applicationActivities: nil)
             
             if let popoverController = activityController.popoverPresentationController {
                 if let cell = tableView.cellForRow(at: indexPath) {
@@ -240,6 +265,9 @@ extension RestaurantVC: UITableViewDelegate {
     
     // MARK: - willDisplay
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard indexPath.row < restaurantShown.count else {
+                    return
+                }
         
         if restaurantShown[indexPath.row] {
             return

@@ -40,7 +40,7 @@ class RestaurantCell: UITableViewCell {
 extension RestaurantCell {
     
     func set(restaurant: Restaurant) {
-        thumbnailImageView.image    = UIImage(named: restaurant.image)
+        thumbnailImageView.image    = restaurant.image 
         nameLabel.text              = restaurant.name
         locationLabel.text          = restaurant.location
         typeLabel.text              = restaurant.type

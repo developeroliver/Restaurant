@@ -6,10 +6,21 @@
 //
 
 import UIKit
+import SwiftData
 
 class NewRestaurantVC: UIViewController {
     
+    var container: ModelContainer?
+    var restaurant: Restaurant?
+    var dataStore: RestaurantDataStore?
+    
     let tableView = UITableView()
+    let nameTextField = UITextField()
+    let typeTextField = UITextField()
+    let addressTextField = UITextField()
+    let phoneTextField = UITextField()
+    let descriptionTextView = UITextView()
+    
     var selectedImage: UIImage?
     var thumbnailImageView: UIImageView = {
         let imageView = UIImageView()
@@ -20,6 +31,9 @@ class NewRestaurantVC: UIViewController {
     /// LifeCycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        container = try? ModelContainer(for: Restaurant.self)
+        restaurant = Restaurant()
         
         style()
         
@@ -56,15 +70,45 @@ extension NewRestaurantVC {
 // MARK: - Our Action Button and Logic
 extension NewRestaurantVC {
     
-    @objc func buttonTapped() {
-        let alert = UIAlertController(title: "Fonctionnalité non disponible", message: "Cette fonctionnalité n'est pas encore disponible.", preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-        alert.addAction(okAction)
-        present(alert, animated: true, completion: nil)
+    @objc func savedButton() {
+       
+        
+        if nameTextField.text == "" || typeTextField.text == "" || addressTextField.text == "" || phoneTextField.text == "" || descriptionTextView.text == "" {
+            let alertController = UIAlertController(title: "Oops", message: "We can't proceed because one of the fields is blank. Please note that all fields are required.", preferredStyle: .alert)
+            let alertAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alertController.addAction(alertAction)
+            present(alertController, animated: true, completion: nil)
+            
+            return
+        }
+        
+        if let restaurant = restaurant {
+            restaurant.name = nameTextField.text ?? ""
+            restaurant.type = typeTextField.text ?? ""
+            restaurant.location = addressTextField.text ?? ""
+            restaurant.phone = phoneTextField.text ?? ""
+            restaurant.summary = descriptionTextView.text
+            restaurant.isFavorite = false
+            
+            if let image = thumbnailImageView.image {
+                restaurant.image = image
+            }
+            
+            container?.mainContext.insert(restaurant)
+            
+            print("Saving data to database...")
+        }
+        dismiss(animated: true) {
+            self.dataStore?.fetchRestaurantData()
+        }
+        
+        
     }
     
     @objc private func leftButtonTapped() {
-        dismiss(animated: true)
+        dismiss(animated: true) {
+           
+        }
     }
     
     @objc func keyboardWillShow(notification: Notification) {
@@ -145,7 +189,6 @@ extension NewRestaurantVC: UITableViewDataSource, UITableViewDelegate {
             nameLabel.text = "Nom"
             stackView.addArrangedSubview(nameLabel)
             
-            let nameTextField = UITextField()
             nameTextField.borderStyle = .roundedRect
             nameTextField.backgroundColor = .secondarySystemBackground
             nameTextField.placeholder = "Entrer un nom"
@@ -157,7 +200,6 @@ extension NewRestaurantVC: UITableViewDataSource, UITableViewDelegate {
             typeLabel.text = "Type"
             stackView.addArrangedSubview(typeLabel)
             
-            let typeTextField = UITextField()
             typeTextField.borderStyle = .roundedRect
             typeTextField.backgroundColor = .secondarySystemBackground
             typeTextField.placeholder = "Entrer un type"
@@ -169,7 +211,6 @@ extension NewRestaurantVC: UITableViewDataSource, UITableViewDelegate {
             addressLabel.text = "Adress"
             stackView.addArrangedSubview(addressLabel)
             
-            let addressTextField = UITextField()
             addressTextField.borderStyle = .roundedRect
             addressTextField.backgroundColor = .secondarySystemBackground
             addressTextField.placeholder = "Entrer une addresse"
@@ -181,7 +222,6 @@ extension NewRestaurantVC: UITableViewDataSource, UITableViewDelegate {
             phoneLabel.text = "Téléphone"
             stackView.addArrangedSubview(phoneLabel)
             
-            let phoneTextField = UITextField()
             phoneTextField.borderStyle = .roundedRect
             phoneTextField.backgroundColor = .secondarySystemBackground
             phoneTextField.placeholder = "Entrer un numéro de téléphone"
@@ -194,7 +234,6 @@ extension NewRestaurantVC: UITableViewDataSource, UITableViewDelegate {
             titleLabel.text = getTitle(forRow: indexPath.row)
             stackView.addArrangedSubview(titleLabel)
             
-            let descriptionTextView = UITextView()
             descriptionTextView.layer.borderWidth = 1
             descriptionTextView.layer.cornerRadius = 10
             descriptionTextView.layer.masksToBounds = true
@@ -254,7 +293,7 @@ extension NewRestaurantVC: UITableViewDataSource, UITableViewDelegate {
         button.setImage(UIImage(systemName: "plus"), for: .normal)
         button.frame = CGRect(x: tableView.frame.width - 70, y: 10, width: 80, height: 40)
         button.tintColor = .label
-        button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(savedButton), for: .touchUpInside)
         headerView.addSubview(button)
         
         return headerView
@@ -316,16 +355,32 @@ extension NewRestaurantVC: UITableViewDataSource, UITableViewDelegate {
 extension NewRestaurantVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        
-        if let selectedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            thumbnailImageView.image = selectedImage
-            thumbnailImageView.contentMode = .scaleAspectFill
-            thumbnailImageView.clipsToBounds = true
-            thumbnailImageView.heightAnchor.constraint(equalToConstant: 200).isActive = true
+            
+            if let selectedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+                // Resize the selected image to make it square
+                let squareImage = resizeImage(image: selectedImage, targetSize: CGSize(width: 200, height: 200))
+                // Set the square image to the thumbnailImageView
+                thumbnailImageView.image = squareImage
+                thumbnailImageView.contentMode = .scaleAspectFill
+                thumbnailImageView.clipsToBounds = true
+                thumbnailImageView.heightAnchor.constraint(equalToConstant: 200).isActive = true
+            }
+            
+            dismiss(animated: true, completion: nil)
         }
         
-        dismiss(animated: true, completion: nil)
-    }
+        // Function to resize the image to a square
+        func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
+            let newSize = CGSize(width: targetSize.width, height: targetSize.height)
+            let rect = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
+            
+            UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+            image.draw(in: rect)
+            let newImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            
+            return newImage ?? UIImage()
+        }
 }
 
 // MARK: - UITextFieldDelegate

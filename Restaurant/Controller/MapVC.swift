@@ -8,12 +8,12 @@
 import UIKit
 import MapKit
 
-class MapVC: UIViewController {
+class MapVC: UIViewController, MKMapViewDelegate {
     
     var restaurant = Restaurant()
     let mapView = MKMapView()
+    let openMapsButton = UIButton(type: .system)
     
-    /// LifeCycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -29,16 +29,38 @@ extension MapVC {
     private func setupBackButton() {
         let backButtonImage = UIImage(systemName: "arrow.backward", withConfiguration: UIImage.SymbolConfiguration(pointSize: 20.0, weight: .bold))
         let backButton = UIBarButtonItem(image: backButtonImage, style: .plain, target: self, action: #selector(backButtonTapped))
-        backButton.tintColor = .white
+        backButton.tintColor = UIColor(named: "NavigationBarTitle")
         navigationItem.leftBarButtonItem = backButton
+        
+        let openMapsImage = UIImage(systemName: "car.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30.0, weight: .bold))
+        let rightButton = UIBarButtonItem(image: openMapsImage, style: .plain, target: self, action: #selector(openMapsButtonTapped))
+        rightButton.tintColor = UIColor(named: "NavigationBarTitle")
+        navigationItem.rightBarButtonItem = rightButton
     }
     
     @objc func backButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
+    
+    @objc private func openMapsButtonTapped() {
+        let geoCoder = CLGeocoder()
+        geoCoder.geocodeAddressString(restaurant.location, completionHandler: { placemarks, error in
+            if let error = error {
+                print(error)
+                return
+            }
+            
+            if let placemarks = placemarks, let placemark = placemarks.first, let location = placemark.location {
+                let coordinates = location.coordinate
+                let mapItem = MKMapItem(placemark: MKPlacemark(coordinate: coordinates))
+                mapItem.name = self.restaurant.name
+                mapItem.openInMaps(launchOptions: nil)
+            }
+        })
+    }
 }
 
-// MARK: - Our Style and Layout
+// MARK: - Our Style and layout {
 extension MapVC {
     
     private func style() {
@@ -56,61 +78,33 @@ extension MapVC {
             }
             
             if let placemarks = placemarks {
-                // Get the first placemark
                 let placemark = placemarks[0]
-                
-                // Add annotation
                 let annotation = MKPointAnnotation()
                 annotation.title = self.restaurant.name
                 annotation.subtitle = self.restaurant.type
                 
                 if let location = placemark.location {
                     annotation.coordinate = location.coordinate
-                    
-                    // Display the annotation
                     self.mapView.showAnnotations([annotation], animated: true)
                     self.mapView.selectAnnotation(annotation, animated: true)
                 }
             }
-            
         })
     }
     
     private func layout() {
         view.addSubview(mapView)
         
+        /// mapView
         NSLayoutConstraint.activate([
             mapView.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 0),
             mapView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 0),
             view.trailingAnchor.constraint(equalToSystemSpacingAfter: mapView.trailingAnchor, multiplier: 0),
             mapView.bottomAnchor.constraint(equalToSystemSpacingBelow: view.bottomAnchor, multiplier: 0)
         ])
-
-    }
-    
-}
-
-// MARK: - MKMapViewDelegate
-extension MapVC: MKMapViewDelegate {
-    
-    // MARK: - viewFor
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        let identifier = "MyMarker"
-        
-        if annotation.isKind(of: MKUserLocation.self) {
-            return nil
-        }
-        
-        // Reuse the annotation if possible
-        var annotationView: MKMarkerAnnotationView? = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKMarkerAnnotationView
-        
-        if annotationView == nil {
-            annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-        }
-        
-        annotationView?.glyphText = "😋"
-        annotationView?.markerTintColor = UIColor.orange
-        
-        return annotationView
     }
 }
+
+
+
+
