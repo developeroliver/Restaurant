@@ -15,10 +15,11 @@ protocol RestaurantDataStore {
 
 class RestaurantVC: UIViewController, RestaurantDataStore {
     
-    
     var container: ModelContainer?
     var selectedIndexPath: IndexPath?
     private var dataSource: UITableViewDiffableDataSource<Int, Restaurant>!
+    
+    var searchController: UISearchController!
     
     var restaurants: [Restaurant] = []
     var restaurantIsFavorites       = Array(repeating: false, count: 21)
@@ -40,15 +41,8 @@ class RestaurantVC: UIViewController, RestaurantDataStore {
             }
         }
         
-        restaurantShown = Array(repeating: false, count: restaurants.count)
-        
-        style()
-        dataSource = setupDataSource()
-        setupInitialSnapshot()
-        
-        view.addSubview(tableView)
-        updateBackgroundImage()
-        fetchRestaurantData()
+        setup()
+        searchControllerSetup()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -63,6 +57,28 @@ class RestaurantVC: UIViewController, RestaurantDataStore {
 
 // MARK: - Our Action Button and Logic
 extension RestaurantVC {
+    
+    private func setup() {
+        restaurantShown = Array(repeating: false, count: restaurants.count)
+        
+        style()
+        dataSource = setupDataSource()
+        setupInitialSnapshot()
+        
+        view.addSubview(tableView)
+        updateBackgroundImage()
+        fetchRestaurantData()
+    }
+    
+    private func searchControllerSetup() {
+        searchController = UISearchController(searchResultsController: nil)
+        self.navigationItem.searchController = searchController
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Rechercher un spot"
+        searchController.searchBar.tintColor = UIColor(named: "NavigationBarTitle")
+        navigationItem.searchController = searchController
+        definesPresentationContext = true    }
     
     private func setupInitialSnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<Int, Restaurant>()
@@ -82,12 +98,27 @@ extension RestaurantVC {
         }
     }
     
-    internal func fetchRestaurantData() {
-        let descriptor = FetchDescriptor<Restaurant>()
+    func fetchRestaurantData() {
+        fetchRestaurantData(searchText: "")
+    }
+    
+    internal func fetchRestaurantData(searchText: String) {
+        let descriptor: FetchDescriptor<Restaurant>
         
+        if searchText.isEmpty {
+            descriptor = FetchDescriptor<Restaurant>()
+        } else {
+            let predicate = #Predicate<Restaurant> { $0.name.localizedStandardContains(searchText) ||
+                $0.location.localizedStandardContains(searchText)
+            }
+            
+            descriptor = FetchDescriptor<Restaurant>(predicate: predicate)
+        }
+
         restaurants = (try? container?.mainContext.fetch(descriptor)) ?? []
         
         updateSnapshot()
+
     }
     
     internal func updateSnapshot(animatingChange: Bool = false) {
@@ -148,7 +179,7 @@ extension RestaurantVC {
             cellProvider: {  tableView, indexPath, restaurant in
                 let cell = tableView.dequeueReusableCell(withIdentifier: RestaurantCell.reuseID, for: indexPath) as! RestaurantCell
                 
-                cell.backgroundColor = .clear
+                cell.selectionStyle = .none
                 cell.set(restaurant: restaurant)
                 cell.favoriteImageView.isHidden = restaurant.isFavorite ? false : true
                 
@@ -179,6 +210,10 @@ extension RestaurantVC: UITableViewDelegate {
     
     // MARK: - trailingSwipeActionsConfigurationForRowAt
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        if searchController.isActive {
+            return UISwipeActionsConfiguration()
+        }
         
         /// Get the selected restaurant
         guard let restaurant = self.dataSource.itemIdentifier(for: indexPath) else {
@@ -246,6 +281,7 @@ extension RestaurantVC: UITableViewDelegate {
             
             let cell = tableView.cellForRow(at: indexPath) as! RestaurantCell
             
+            
             cell.favoriteImageView.isHidden = self.restaurants[indexPath.row].isFavorite
             
             self.restaurants[indexPath.row].isFavorite = self.restaurants[indexPath.row].isFavorite ? false : true
@@ -284,5 +320,13 @@ extension RestaurantVC: UITableViewDelegate {
         UIView.animate(withDuration: 0.2, delay: TimeInterval(indexPath.row) * 0.1, options: .curveEaseOut, animations: {
             cell.layer.transform = CATransform3DIdentity
         }, completion: nil)
+    }
+}
+
+extension RestaurantVC: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let searchText = searchController.searchBar.text else { return }
+    
+        fetchRestaurantData(searchText: searchText)
     }
 }
