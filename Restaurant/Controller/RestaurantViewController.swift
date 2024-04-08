@@ -1,5 +1,5 @@
 //
-//  RestaurantVC.swift
+//  RestaurantViewController.swift
 //  Restaurant
 //
 //  Created by olivier geiger on 24/03/2024.
@@ -13,7 +13,7 @@ protocol RestaurantDataStore {
     func updateSnapshot(animatingChange: Bool)
 }
 
-class RestaurantVC: UIViewController, RestaurantDataStore {
+class RestaurantViewController: UIViewController, RestaurantDataStore {
     
     var container: ModelContainer?
     var selectedIndexPath: IndexPath?
@@ -41,6 +41,8 @@ class RestaurantVC: UIViewController, RestaurantDataStore {
             }
         }
         
+        navigationItem.hidesBackButton = true
+        
         setup()
         searchControllerSetup()
     }
@@ -56,7 +58,7 @@ class RestaurantVC: UIViewController, RestaurantDataStore {
 }
 
 // MARK: - Our Action Button and Logic
-extension RestaurantVC {
+extension RestaurantViewController {
     
     private func setup() {
         restaurantShown = Array(repeating: false, count: restaurants.count)
@@ -149,7 +151,7 @@ extension RestaurantVC {
 }
 
 // MARK: - Our Style and Layout
-extension RestaurantVC {
+extension RestaurantViewController {
     
     private func style() {
         view.backgroundColor = .systemBackground
@@ -165,7 +167,8 @@ extension RestaurantVC {
         view.addSubview(tableView)
         tableView.cellLayoutMarginsFollowReadableWidth = true
         tableView.frame     = view.bounds
-        tableView.rowHeight = 140
+        tableView.estimatedRowHeight = 140.0
+        tableView.rowHeight = UITableView.automaticDimension
         tableView.separatorStyle = .none
         tableView.register(RestaurantCell.self, forCellReuseIdentifier: RestaurantCell.reuseID)
         tableView.delegate = self
@@ -192,7 +195,7 @@ extension RestaurantVC {
 }
 
 // MARK: - UITableViewDelegate
-extension RestaurantVC: UITableViewDelegate {
+extension RestaurantViewController: UITableViewDelegate {
     
     // MARK: - didSelectRowAt
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -323,7 +326,7 @@ extension RestaurantVC: UITableViewDelegate {
     }
 }
 
-extension RestaurantVC: UISearchResultsUpdating {
+extension RestaurantViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         guard let searchText = searchController.searchBar.text else { return }
     

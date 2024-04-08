@@ -208,7 +208,7 @@ extension NewRestaurantVC: UITableViewDataSource, UITableViewDelegate {
             stackView.addArrangedSubview(typeTextField)
         case 3:
             let addressLabel = UILabel()
-            addressLabel.text = "Adress"
+            addressLabel.text = "Adresse"
             stackView.addArrangedSubview(addressLabel)
             
             addressTextField.borderStyle = .roundedRect
@@ -240,6 +240,7 @@ extension NewRestaurantVC: UITableViewDataSource, UITableViewDelegate {
             descriptionTextView.layer.borderColor = UIColor.gray.cgColor
             descriptionTextView.textContainer.maximumNumberOfLines = 5
             descriptionTextView.tag = 5
+            descriptionTextView.text = "Veuillez entrer une description du lieu que vous avez découvert, pour pouvoir le partager avec vos amis."
             descriptionTextView.textContainer.lineBreakMode = .byTruncatingTail
             descriptionTextView.contentMode = .top
             descriptionTextView.backgroundColor = .systemGray6

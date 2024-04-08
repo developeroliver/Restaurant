@@ -18,7 +18,7 @@ class MainTabBarVC: UITabBarController {
     
     
     func createHomeNC() -> UINavigationController {
-        let homeVC        = RestaurantVC()
+        let homeVC        = RestaurantViewController()
         homeVC.tabBarItem = UITabBarItem(title: "Accueil", image: UIImage(systemName: "tag.fill"), tag: 0)
         
         return UINavigationController(rootViewController: homeVC)
