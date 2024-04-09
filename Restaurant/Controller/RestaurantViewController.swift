@@ -30,6 +30,8 @@ class RestaurantViewController: UIViewController, RestaurantDataStore {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+//        if UserDefaults.standard.bool(forKey: "hasViewedWalkthrough") { return }
+        
         container = try? ModelContainer(for: Restaurant.self)
         
         if let appearance = navigationController?.navigationBar.standardAppearance
@@ -47,13 +49,19 @@ class RestaurantViewController: UIViewController, RestaurantDataStore {
         searchControllerSetup()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        
+//        if !restaurants.isEmpty {
+//            let indexPath = IndexPath(row: 0, section: 0)
+//            tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+//        }
+//    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         
-        if !restaurants.isEmpty {
-            let indexPath = IndexPath(row: 0, section: 0)
-            tableView.scrollToRow(at: indexPath, at: .top, animated: false)
-        }
+        if UserDefaults.standard.bool(forKey: "hasViewedWalkthrough") { return }
     }
 }
 

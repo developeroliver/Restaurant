@@ -18,7 +18,8 @@ class WalkthroughController: UIViewController {
                            "Recherchez et localisez vos spots préférés sur Maps",
                            "Trouvez des endroits et partagez-les avec vos amis"]
     
-    // MARK: - UI Elements
+    // MARK: - UI DECLARATIONS
+    
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -42,6 +43,8 @@ class WalkthroughController: UIViewController {
         label.numberOfLines = 0
         return label
     }()
+    
+    
     
     private let pageControl: UIPageControl = {
         let pageControl = UIPageControl()
@@ -67,12 +70,15 @@ class WalkthroughController: UIViewController {
     // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupUI()
         setupConstraints()
         updateUI()
     }
     
-    // MARK: - UI Setup
+    // MARK: - @objc FUNCTIONS
+    
+    // MARK: - FUNCTIONS
     private func setupUI() {
         view.backgroundColor = .systemBackground
         view.addSubview(imageView)
@@ -82,6 +88,7 @@ class WalkthroughController: UIViewController {
         view.addSubview(previousButton)
         view.addSubview(nextButton)
         
+        
         pageControl.numberOfPages = 3
         pageControl.addTarget(self, action: #selector(pageControlValueChanged(_:)), for: .valueChanged)
         previousButton.addTarget(self, action: #selector(previousButtonTapped(_:)), for: .touchUpInside)
@@ -90,22 +97,22 @@ class WalkthroughController: UIViewController {
     
     private func setupConstraints() {
         imageView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(100)
+            make.top.equalToSuperview().offset(150)
             make.centerX.equalToSuperview()
             make.width.equalToSuperview().multipliedBy(0.8)
-            make.height.equalTo(200)
+            make.height.equalTo(300)
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(imageView.snp.bottom).offset(20)
+            make.top.equalTo(imageView.snp.bottom).offset(50)
             make.leading.trailing.equalToSuperview().inset(20)
         }
         
         subtitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(10)
-            make.leading.trailing.equalToSuperview().inset(20)
+            make.top.equalTo(titleLabel.snp.bottom).offset(30)
+            make.leading.trailing.equalToSuperview().inset(30)
         }
-        
+//        
         pageControl.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.bottom.equalTo(nextButton.snp.top).offset(-20)
@@ -145,13 +152,21 @@ class WalkthroughController: UIViewController {
     }
     
     @objc private func nextButtonTapped(_ sender: UIButton) {
-        if currentIndex < 2 {
+        
+        switch currentIndex {
+        case 0..<2:
             currentIndex += 1
             updateUI()
-        } else {
+        case 2:
+            print("ok")
             let navigation = RestaurantViewController()
             navigationController?.pushViewController(navigation, animated: true)
             navigationController?.setViewControllers([navigation], animated: false)
+            UserDefaults.standard.set(true, forKey: "hasViewedWalkthrough")
+            UserDefaults.standard.synchronize()
+   
+        default:
+            break
         }
     }
 }
