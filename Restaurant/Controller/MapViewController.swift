@@ -1,5 +1,5 @@
 //
-//  MapVC.swift
+//  MapViewController.swift
 //  Restaurant
 //
 //  Created by olivier geiger on 29/03/2024.
@@ -7,37 +7,31 @@
 
 import UIKit
 import MapKit
+import SnapKit
 
-class MapVC: UIViewController, MKMapViewDelegate {
+class MapViewController: UIViewController, MKMapViewDelegate {
     
+    // MARK: - PROPERTIES
     var restaurant = Restaurant()
     let mapView = MKMapView()
     let openMapsButton = UIButton(type: .system)
     
+    // MARK: - LIFECYLE METHODS
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        style()
+        
+        setupMapKit()
         layout()
         setupBackButton()
     }
-}
-
-// MARK: - Our Action Button and Logic
-extension MapVC {
     
-    private func setupBackButton() {
-        let backButtonImage = UIImage(systemName: "arrow.backward", withConfiguration: UIImage.SymbolConfiguration(pointSize: 20.0, weight: .bold))
-        let backButton = UIBarButtonItem(image: backButtonImage, style: .plain, target: self, action: #selector(backButtonTapped))
-        backButton.tintColor = UIColor(named: "NavigationBarTitle")
-        navigationItem.leftBarButtonItem = backButton
-        
-        let openMapsImage = UIImage(systemName: "car.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30.0, weight: .bold))
-        let rightButton = UIBarButtonItem(image: openMapsImage, style: .plain, target: self, action: #selector(openMapsButtonTapped))
-        rightButton.tintColor = UIColor(named: "NavigationBarTitle")
-        navigationItem.rightBarButtonItem = rightButton
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        hidesBottomBarWhenPushed = true
     }
     
+    // MARK: - @objc FUNCTIONS
     @objc func backButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
@@ -56,14 +50,22 @@ extension MapVC {
                 mapItem.name = self.restaurant.name
                 mapItem.openInMaps(launchOptions: nil)
             }
-        })
-    }
-}
-
-// MARK: - Our Style and layout {
-extension MapVC {
+        })    }
     
-    private func style() {
+    //MARK: - FUNCTIONS
+    private func setupBackButton() {
+        let backButtonImage = UIImage(systemName: "arrow.backward", withConfiguration: UIImage.SymbolConfiguration(pointSize: 20.0, weight: .bold))
+        let backButton = UIBarButtonItem(image: backButtonImage, style: .plain, target: self, action: #selector(backButtonTapped))
+        backButton.tintColor = UIColor(named: "NavigationBarTitle")
+        navigationItem.leftBarButtonItem = backButton
+        
+        let openMapsImage = UIImage(systemName: "car.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30.0, weight: .bold))
+        let rightButton = UIBarButtonItem(image: openMapsImage, style: .plain, target: self, action: #selector(openMapsButtonTapped))
+        rightButton.tintColor = UIColor(named: "NavigationBarTitle")
+        navigationItem.rightBarButtonItem = rightButton
+    }
+    
+    private func setupMapKit() {
         mapView.translatesAutoresizingMaskIntoConstraints = false
         mapView.delegate = self
         mapView.showsCompass = true
@@ -95,15 +97,15 @@ extension MapVC {
     private func layout() {
         view.addSubview(mapView)
         
-        /// mapView
-        NSLayoutConstraint.activate([
-            mapView.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 0),
-            mapView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 0),
-            view.trailingAnchor.constraint(equalToSystemSpacingAfter: mapView.trailingAnchor, multiplier: 0),
-            mapView.bottomAnchor.constraint(equalToSystemSpacingBelow: view.bottomAnchor, multiplier: 0)
-        ])
+        mapView.snp.makeConstraints { make in
+            make.top.equalTo(view.snp.top)
+            make.bottom.equalTo(view.snp.bottom)
+            make.leading.equalTo(view.snp.leading)
+            make.trailing.equalTo(view.snp.trailing)
+        }
     }
 }
+    
 
 
 

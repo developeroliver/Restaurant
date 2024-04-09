@@ -22,8 +22,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if !UserDefaults.standard.bool(forKey: "hasViewedWalkthrough") {
             window?.rootViewController = navigationController
         } else {
-            let restaurantViewController = RestaurantViewController()
-            window?.rootViewController = UINavigationController(rootViewController: restaurantViewController)
+            let mainViewController = MainTabBarViewController()
+            window?.rootViewController = UINavigationController(rootViewController: mainViewController)
         }
         
         

@@ -116,7 +116,7 @@ extension RestaurantDetailVC {
     @objc func mapTapped(_ gestureRecognizer: UITapGestureRecognizer) {
         if gestureRecognizer.state == .ended {
             
-            let destination = MapVC()
+            let destination = MapViewController()
             destination.restaurant = restaurant
             navigationController?.pushViewController(destination, animated: true)
         }

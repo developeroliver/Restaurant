@@ -16,7 +16,7 @@
 		374CE23B2BB5D5A200C2EA2E /* Nunito-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 374CE23A2BB5D5A200C2EA2E /* Nunito-Bold.ttf */; };
 		374CE23E2BB5F0A300C2EA2E /* UIColor+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374CE23D2BB5F0A300C2EA2E /* UIColor+Ext.swift */; };
 		3779D6772BB88008003AD375 /* RatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3779D6762BB88008003AD375 /* RatingView.swift */; };
-		3779D67B2BB895D8003AD375 /* MainTabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3779D67A2BB895D8003AD375 /* MainTabBarVC.swift */; };
+		3779D67B2BB895D8003AD375 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3779D67A2BB895D8003AD375 /* MainTabBarViewController.swift */; };
 		3779D67D2BB8961D003AD375 /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3779D67C2BB8961D003AD375 /* ProfileVC.swift */; };
 		3779D67F2BB89665003AD375 /* DiscoverVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3779D67E2BB89665003AD375 /* DiscoverVC.swift */; };
 		377AD2ED2BB0305600833390 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377AD2EC2BB0305600833390 /* AppDelegate.swift */; };
@@ -26,7 +26,7 @@
 		377AD2F92BB0305700833390 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 377AD2F72BB0305700833390 /* LaunchScreen.storyboard */; };
 		377AD31D2BB0359900833390 /* RestaurantCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377AD31C2BB0359900833390 /* RestaurantCell.swift */; };
 		377AD31F2BB0661200833390 /* Restaurant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377AD31E2BB0661200833390 /* Restaurant.swift */; };
-		37C192B32BB75302008A4B9F /* MapVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C192B22BB75302008A4B9F /* MapVC.swift */; };
+		37C192B32BB75302008A4B9F /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C192B22BB75302008A4B9F /* MapViewController.swift */; };
 		37F4EC342BC432E70065CAE9 /* WalkthroughController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F4EC332BC432E70065CAE9 /* WalkthroughController.swift */; };
 		37F4EC372BC4338A0065CAE9 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 37F4EC362BC4338A0065CAE9 /* SnapKit */; };
 /* End PBXBuildFile section */
@@ -58,7 +58,7 @@
 		374CE23A2BB5D5A200C2EA2E /* Nunito-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-Bold.ttf"; sourceTree = "<group>"; };
 		374CE23D2BB5F0A300C2EA2E /* UIColor+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Ext.swift"; sourceTree = "<group>"; };
 		3779D6762BB88008003AD375 /* RatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingView.swift; sourceTree = "<group>"; };
-		3779D67A2BB895D8003AD375 /* MainTabBarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarVC.swift; sourceTree = "<group>"; };
+		3779D67A2BB895D8003AD375 /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
 		3779D67C2BB8961D003AD375 /* ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
 		3779D67E2BB89665003AD375 /* DiscoverVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverVC.swift; sourceTree = "<group>"; };
 		377AD2E92BB0305600833390 /* Restaurant.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Restaurant.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -72,7 +72,7 @@
 		377AD3092BB0305700833390 /* RestaurantUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RestaurantUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		377AD31C2BB0359900833390 /* RestaurantCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantCell.swift; sourceTree = "<group>"; };
 		377AD31E2BB0661200833390 /* Restaurant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Restaurant.swift; sourceTree = "<group>"; };
-		37C192B22BB75302008A4B9F /* MapVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapVC.swift; sourceTree = "<group>"; };
+		37C192B22BB75302008A4B9F /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		37F4EC332BC432E70065CAE9 /* WalkthroughController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -201,8 +201,8 @@
 			isa = PBXGroup;
 			children = (
 				3779D67E2BB89665003AD375 /* DiscoverVC.swift */,
-				3779D67A2BB895D8003AD375 /* MainTabBarVC.swift */,
-				37C192B22BB75302008A4B9F /* MapVC.swift */,
+				3779D67A2BB895D8003AD375 /* MainTabBarViewController.swift */,
+				37C192B22BB75302008A4B9F /* MapViewController.swift */,
 				3743FC0C2BB9E0780053D6B7 /* NewRestaurantVC.swift */,
 				3779D67C2BB8961D003AD375 /* ProfileVC.swift */,
 				3733C0432BB1DA450057D293 /* RestaurantDetailVC.swift */,
@@ -372,7 +372,7 @@
 				3779D6772BB88008003AD375 /* RatingView.swift in Sources */,
 				377AD31F2BB0661200833390 /* Restaurant.swift in Sources */,
 				377AD31D2BB0359900833390 /* RestaurantCell.swift in Sources */,
-				37C192B32BB75302008A4B9F /* MapVC.swift in Sources */,
+				37C192B32BB75302008A4B9F /* MapViewController.swift in Sources */,
 				377AD2F12BB0305600833390 /* RestaurantViewController.swift in Sources */,
 				373277CB2BB83E4F00F089AD /* CustomButton.swift in Sources */,
 				373D81502BBAE4DC0028CEFD /* UIImage.swift in Sources */,
@@ -381,7 +381,7 @@
 				377AD2ED2BB0305600833390 /* AppDelegate.swift in Sources */,
 				374CE23E2BB5F0A300C2EA2E /* UIColor+Ext.swift in Sources */,
 				3779D67F2BB89665003AD375 /* DiscoverVC.swift in Sources */,
-				3779D67B2BB895D8003AD375 /* MainTabBarVC.swift in Sources */,
+				3779D67B2BB895D8003AD375 /* MainTabBarViewController.swift in Sources */,
 				3779D67D2BB8961D003AD375 /* ProfileVC.swift in Sources */,
 				3743FC0D2BB9E0780053D6B7 /* NewRestaurantVC.swift in Sources */,
 				3733C0422BB1C1410057D293 /* RestaurantDiffableDataSource.swift in Sources */,

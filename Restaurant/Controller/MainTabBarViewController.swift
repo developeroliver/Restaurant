@@ -1,5 +1,5 @@
 //
-//  MainTabBarVC.swift
+//  MainTabBarViewController.swift
 //  Restaurant
 //
 //  Created by olivier geiger on 30/03/2024.
@@ -7,16 +7,26 @@
 
 import UIKit
 
-class MainTabBarVC: UITabBarController {
+class MainTabBarViewController: UITabBarController {
     
-    /// LifeCycle Methods
+    // MARK: - LIFECYCLE METHODS
     override func viewDidLoad() {
         super.viewDidLoad()
         UITabBar.appearance().tintColor = .systemOrange
         viewControllers                 = [createHomeNC(), createDiscoverNC(), createProfileNC()]
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = true
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.tabBarController?.tabBar.isHidden = false
+    }
     
+    // MARK: - FUNCTIONS
     func createHomeNC() -> UINavigationController {
         let homeVC        = RestaurantViewController()
         homeVC.tabBarItem = UITabBarItem(title: "Accueil", image: UIImage(systemName: "tag.fill"), tag: 0)
